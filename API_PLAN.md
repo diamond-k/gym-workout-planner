@@ -1,3 +1,5 @@
+# Workout Planner API Plan
+
 ## EXERCISES
 
 - **GET /api/exercises**
