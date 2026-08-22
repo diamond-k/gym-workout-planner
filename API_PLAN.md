@@ -1,4 +1,4 @@
-# EXERCISES
+## EXERCISES
 
 - **GET /api/exercises**
 → get the exercise catalogue
@@ -7,7 +7,7 @@
 → filter exercises by muscle group
 
 
-# WORKOUT PLANS
+## WORKOUT PLANS
 
 - **GET /api/workout-plans**
 → get all workout plans
@@ -25,7 +25,7 @@
 → delete a workout plan
 
 
-# PLANNED EXERCISES
+## PLANNED EXERCISES
 
 - **GET /api/workout-plans/{planId}/planned-exercises**
 → get the exercises currently inside one workout plan
