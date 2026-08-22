@@ -1,4 +1,4 @@
-package com.example.api;
+package com.diamond.workoutplanner;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
