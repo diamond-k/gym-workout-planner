@@ -22,7 +22,8 @@ public class WorkoutPlanService {
     private final WorkoutPlanRepository workoutPlanRepository;
     private final PlannedExerciseRepository plannedExerciseRepository;
 
-    public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository, PlannedExerciseRepository plannedExerciseRepository) {
+    public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository,
+            PlannedExerciseRepository plannedExerciseRepository) {
         this.workoutPlanRepository = workoutPlanRepository;
         this.plannedExerciseRepository = plannedExerciseRepository;
     }
@@ -49,9 +50,7 @@ public class WorkoutPlanService {
     @Transactional
     public void deleteWorkoutPlan(int id) {
         WorkoutPlan existingWorkoutPlan = getWorkoutPlanById(id);
-        plannedExerciseRepository.deleteAll(
-            plannedExerciseRepository.findByWorkoutPlanId(id)
-        );
+        plannedExerciseRepository.deleteAll(plannedExerciseRepository.findByWorkoutPlanId(id));
         workoutPlanRepository.delete(existingWorkoutPlan);
     }
 }

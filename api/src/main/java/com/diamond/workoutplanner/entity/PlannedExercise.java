@@ -41,7 +41,7 @@ public class PlannedExercise {
         this.exercise = exercise;
         this.targetSets = targetSets;
         this.targetReps = targetReps;
-    }   
+    }
 
     public int getId() {
         return id;

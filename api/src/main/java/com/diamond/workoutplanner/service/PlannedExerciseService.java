@@ -1,8 +1,7 @@
 package com.diamond.workoutplanner.service;
 
-import org.springframework.stereotype.Service;
 import java.util.List;
-
+import org.springframework.stereotype.Service;
 import com.diamond.workoutplanner.entity.Exercise;
 import com.diamond.workoutplanner.entity.PlannedExercise;
 import com.diamond.workoutplanner.entity.WorkoutPlan;
@@ -18,7 +17,7 @@ WorkoutPlanRepository
 - finds the workout plan it belongs to
 
 ExerciseRepository 
-- find the catalogue exercise being added
+- finds the catalogue exercise being added
 */
 
 @Service
@@ -28,7 +27,8 @@ public class PlannedExerciseService {
     private final WorkoutPlanRepository workoutPlanRepository;
     private final ExerciseRepository exerciseRepository;
 
-    public PlannedExerciseService(PlannedExerciseRepository plannedExerciseRepository, WorkoutPlanRepository workoutPlanRepository, ExerciseRepository exerciseRepository) {
+    public PlannedExerciseService(PlannedExerciseRepository plannedExerciseRepository,
+            WorkoutPlanRepository workoutPlanRepository, ExerciseRepository exerciseRepository) {
         this.plannedExerciseRepository = plannedExerciseRepository;
         this.workoutPlanRepository = workoutPlanRepository;
         this.exerciseRepository = exerciseRepository;
@@ -51,15 +51,18 @@ public class PlannedExerciseService {
         return plannedExerciseRepository.save(plannedExercise);
     }
 
-    public PlannedExercise updatePlannedExercise(int workoutPlanId, int plannedExerciseId, PlannedExercise updatedPlannedExercise) {
-        PlannedExercise existingPlannedExercise = getPlannedExerciseByIdAndWorkoutPlanId(plannedExerciseId, workoutPlanId);
+    public PlannedExercise updatePlannedExercise(int workoutPlanId, int plannedExerciseId,
+            PlannedExercise updatedPlannedExercise) {
+        PlannedExercise existingPlannedExercise = getPlannedExerciseByIdAndWorkoutPlanId(plannedExerciseId,
+                workoutPlanId);
         existingPlannedExercise.setTargetReps(updatedPlannedExercise.getTargetReps());
         existingPlannedExercise.setTargetSets(updatedPlannedExercise.getTargetSets());
         return plannedExerciseRepository.save(existingPlannedExercise);
     }
 
     public void deletePlannedExercise(int workoutPlanId, int plannedExerciseId) {
-        PlannedExercise existingPlannedExercise = getPlannedExerciseByIdAndWorkoutPlanId(plannedExerciseId, workoutPlanId);
+        PlannedExercise existingPlannedExercise = getPlannedExerciseByIdAndWorkoutPlanId(plannedExerciseId,
+                workoutPlanId);
         plannedExerciseRepository.delete(existingPlannedExercise);
     }
 }

@@ -17,8 +17,8 @@ public class WorkoutPlan {
     private int id;
 
     @Column(nullable = false) // name is required and cannot be null
-    private String name; 
-    
+    private String name;
+
     @Column(length = 1000) // allows up to 1000 characters for the description
     private String description;
 
@@ -33,27 +33,27 @@ public class WorkoutPlan {
         this.description = description;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 
-    public LocalDateTime getCreatedAt(){
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
 
