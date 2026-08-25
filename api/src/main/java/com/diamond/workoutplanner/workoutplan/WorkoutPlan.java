@@ -1,4 +1,4 @@
-package com.diamond.workoutplanner.entity;
+package com.diamond.workoutplanner.workoutplan;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

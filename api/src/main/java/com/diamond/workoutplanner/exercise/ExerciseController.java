@@ -1,11 +1,8 @@
-package com.diamond.workoutplanner.controller;
+package com.diamond.workoutplanner.exercise;
 
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.diamond.workoutplanner.entity.Exercise;
-import com.diamond.workoutplanner.entity.MuscleGroup;
-import com.diamond.workoutplanner.service.ExerciseService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 

@@ -1,4 +1,4 @@
-package com.diamond.workoutplanner.entity;
+package com.diamond.workoutplanner.exercise;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,8 +1,7 @@
-package com.diamond.workoutplanner.controller;
+package com.diamond.workoutplanner.workoutplan;
 
 import java.util.List;
-import com.diamond.workoutplanner.entity.WorkoutPlan;
-import com.diamond.workoutplanner.service.WorkoutPlanService;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;

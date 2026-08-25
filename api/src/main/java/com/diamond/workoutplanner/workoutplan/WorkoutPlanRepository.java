@@ -1,6 +1,5 @@
-package com.diamond.workoutplanner.repository;
+package com.diamond.workoutplanner.workoutplan;
 
-import com.diamond.workoutplanner.entity.WorkoutPlan;
 import org.springframework.data.repository.ListCrudRepository;
 
 public interface WorkoutPlanRepository extends ListCrudRepository<WorkoutPlan, Integer> {

@@ -1,11 +1,10 @@
-package com.diamond.workoutplanner.service;
+package com.diamond.workoutplanner.workoutplan;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.diamond.workoutplanner.entity.WorkoutPlan;
-import com.diamond.workoutplanner.repository.WorkoutPlanExerciseRepository;
-import com.diamond.workoutplanner.repository.WorkoutPlanRepository;
+
+import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExerciseRepository;
 
 /*
 WorkoutPlanRepository

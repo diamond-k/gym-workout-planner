@@ -1,4 +1,4 @@
-package com.diamond.workoutplanner.controller;
+package com.diamond.workoutplanner.workoutplanexercise;
 
 import java.util.List;
 
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.diamond.workoutplanner.entity.WorkoutPlanExercise;
-import com.diamond.workoutplanner.service.WorkoutPlanExerciseService;
 
 @RestController
 @RequestMapping("/api/workout-plans/{workoutPlanId}/workout-plan-exercises")
@@ -44,7 +42,7 @@ public class WorkoutPlanExerciseController {
     }
 
     @PutMapping("/{workoutPlanExerciseId}")
-    public WorkoutPlanExercise updatePlannedExercise(
+    public WorkoutPlanExercise updateWorkoutPlanExercise(
             @PathVariable int workoutPlanId,
             @PathVariable int workoutPlanExerciseId,
             @RequestBody WorkoutPlanExercise updatedWorkoutPlanExercise) {

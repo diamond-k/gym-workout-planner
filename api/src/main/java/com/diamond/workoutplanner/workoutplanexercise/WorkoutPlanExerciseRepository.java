@@ -1,8 +1,7 @@
-package com.diamond.workoutplanner.repository;
+package com.diamond.workoutplanner.workoutplanexercise;
 
 import java.util.List;
 import java.util.Optional;
-import com.diamond.workoutplanner.entity.WorkoutPlanExercise;
 
 import org.springframework.data.repository.ListCrudRepository;
 

@@ -1,4 +1,4 @@
-package com.diamond.workoutplanner.entity;
+package com.diamond.workoutplanner.exercise;
 
 public enum MuscleGroup {
     CHEST,
