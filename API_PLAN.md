@@ -29,14 +29,14 @@
 
 ## WORKOUT PLAN EXERCISES
 
-- **GET /api/workout-plans/{planId}/workout-plan-exercises**
+- **GET /api/workout-plans/{workoutPlanId}/workout-plan-exercises**
 → get the exercises currently inside one workout plan
 
-- **POST /api/workout-plans/{planId}/workout-plan-exercises**
+- **POST /api/workout-plans/{workoutPlanId}/workout-plan-exercises**
 → add an exercise to that workout plan with target sets/reps
 
-- **PUT /api/workout-plans/{planId}/workout-plan-exercises/{workoutPlanExerciseId}**
+- **PUT /api/workout-plans/{workoutPlanId}/workout-plan-exercises/{workoutPlanExerciseId}**
 → change target sets/reps
 
-- **DELETE /api/workout-plans/{planId}/workout-plan-exercises/{workoutPlanExerciseId}**
+- **DELETE /api/workout-plans/{workoutPlanId}/workout-plan-exercises/{workoutPlanExerciseId}**
 → remove that exercise from the plan
