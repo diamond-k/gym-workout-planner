@@ -9,7 +9,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 
-@Entity // marks this class as a JPA entity
+@Entity
 @Table(name = "workout_plans") // maps this class to the 'workout_plans' table
 public class WorkoutPlan {
     @Id

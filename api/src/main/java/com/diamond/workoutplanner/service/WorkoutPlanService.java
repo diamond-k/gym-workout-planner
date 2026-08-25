@@ -4,28 +4,28 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.diamond.workoutplanner.entity.WorkoutPlan;
-import com.diamond.workoutplanner.repository.PlannedExerciseRepository;
+import com.diamond.workoutplanner.repository.WorkoutPlanExerciseRepository;
 import com.diamond.workoutplanner.repository.WorkoutPlanRepository;
 
 /*
 WorkoutPlanRepository
 manages the WorkoutPlan entity
 
-PlannedExerciseRepository
+WorkoutPlanExerciseRepository
 is needed because deleting a WorkoutPlan must first 
-delete the PlannedExercise records that belong to it
+delete the WorkoutPlanExercise records that belong to it
 */
 
 @Service
 public class WorkoutPlanService {
 
     private final WorkoutPlanRepository workoutPlanRepository;
-    private final PlannedExerciseRepository plannedExerciseRepository;
+    private final WorkoutPlanExerciseRepository workoutPlanExerciseRepository;
 
     public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository,
-            PlannedExerciseRepository plannedExerciseRepository) {
+            WorkoutPlanExerciseRepository workoutPlanExerciseRepository) {
         this.workoutPlanRepository = workoutPlanRepository;
-        this.plannedExerciseRepository = plannedExerciseRepository;
+        this.workoutPlanExerciseRepository = workoutPlanExerciseRepository;
     }
 
     public List<WorkoutPlan> getAllWorkoutPlans() {
@@ -50,7 +50,7 @@ public class WorkoutPlanService {
     @Transactional
     public void deleteWorkoutPlan(int id) {
         WorkoutPlan existingWorkoutPlan = getWorkoutPlanById(id);
-        plannedExerciseRepository.deleteAll(plannedExerciseRepository.findByWorkoutPlanId(id));
+        workoutPlanExerciseRepository.deleteAll(workoutPlanExerciseRepository.findByWorkoutPlanId(id));
         workoutPlanRepository.delete(existingWorkoutPlan);
     }
 }

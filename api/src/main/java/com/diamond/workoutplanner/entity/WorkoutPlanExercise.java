@@ -11,8 +11,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.Positive;
 
 @Entity
-@Table(name = "planned_exercises")
-public class PlannedExercise {
+@Table(name = "workout_plan_exercises")
+public class WorkoutPlanExercise { // maps this class to the 'workout_plan_exercises' table
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -33,10 +33,10 @@ public class PlannedExercise {
     @Column(nullable = false)
     private int targetReps;
 
-    public PlannedExercise() {
+    public WorkoutPlanExercise() {
     }
 
-    public PlannedExercise(WorkoutPlan workoutPlan, Exercise exercise, int targetSets, int targetReps) {
+    public WorkoutPlanExercise(WorkoutPlan workoutPlan, Exercise exercise, int targetSets, int targetReps) {
         this.workoutPlan = workoutPlan;
         this.exercise = exercise;
         this.targetSets = targetSets;

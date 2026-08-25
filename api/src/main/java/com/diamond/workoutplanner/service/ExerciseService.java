@@ -6,8 +6,7 @@ import com.diamond.workoutplanner.entity.Exercise;
 import com.diamond.workoutplanner.entity.MuscleGroup;
 import com.diamond.workoutplanner.repository.ExerciseRepository;
 
-@Service // create and manage an instance of this class as part of the
-         // service/business-logic layer.
+@Service // create and manage an instance of this class as part of the service/business-logic layer.
 public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
