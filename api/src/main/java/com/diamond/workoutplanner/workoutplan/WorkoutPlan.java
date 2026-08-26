@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "workout_plans") // maps this class to the 'workout_plans' table
@@ -16,10 +18,13 @@ public class WorkoutPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false) // name is required and cannot be null
+    @NotBlank(message = "Name is required")
+    @Size(max = 255, message = "Workout plan name must be 255 characters or less")
+    @Column(nullable = false)
     private String name;
 
-    @Column(length = 1000) // allows up to 1000 characters for the description
+    @Size(max = 1000, message = "Workout plan description must be 1000 characters or less")
+    @Column(length = 1000)
     private String description;
 
     @Column(nullable = false, updatable = false)

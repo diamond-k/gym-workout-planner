@@ -1,7 +1,7 @@
 package com.diamond.workoutplanner.workoutplan;
 
 import java.util.List;
-
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,12 +32,12 @@ public class WorkoutPlanController {
     }
 
     @PostMapping
-    public WorkoutPlan createWorkoutPlan(@RequestBody WorkoutPlan workoutPlan) {
+    public WorkoutPlan createWorkoutPlan(@Valid @RequestBody WorkoutPlan workoutPlan) {
         return workoutPlanService.createWorkoutPlan(workoutPlan);
     }
 
     @PutMapping("/{id}")
-    public WorkoutPlan updateWorkoutPlan(@PathVariable int id, @RequestBody WorkoutPlan workoutPlan) {
+    public WorkoutPlan updateWorkoutPlan(@PathVariable int id, @Valid @RequestBody WorkoutPlan workoutPlan) {
         return workoutPlanService.updateWorkoutPlan(id, workoutPlan);
     }
 

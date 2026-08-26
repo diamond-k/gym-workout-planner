@@ -2,6 +2,7 @@ package com.diamond.workoutplanner.exercise;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import com.diamond.workoutplanner.exception.ResourceNotFoundException;
 
 @Service // create and manage an instance of this class as part of the service/business-logic layer.
 public class ExerciseService {
@@ -18,7 +19,10 @@ public class ExerciseService {
     }
 
     public Exercise getExerciseById(int id) {
-        return exerciseRepository.findById(id).orElseThrow();
+        return exerciseRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "Exercise not found with id: " + id
+            ));
     }
 
     public List<Exercise> getByMuscleGroup(MuscleGroup muscleGroup) {

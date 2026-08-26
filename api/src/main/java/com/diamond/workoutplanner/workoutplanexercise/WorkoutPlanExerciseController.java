@@ -1,7 +1,8 @@
 package com.diamond.workoutplanner.workoutplanexercise;
 
 import java.util.List;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,13 +27,21 @@ public class WorkoutPlanExerciseController {
         return workoutPlanExerciseService.getWorkoutPlanExercisesByWorkoutPlanId(workoutPlanId);
     }
 
-    public record CreateWorkoutPlanExerciseRequest(int exerciseId, int targetSets, int targetReps) {
+    public record CreateWorkoutPlanExerciseRequest(
+        @Positive(message = "Exercise id must be greater than 0")
+        int exerciseId,
+
+        @Positive(message = "Target sets must be greater than 0")
+        int targetSets,
+
+        @Positive(message = "Target reps must be greater than 0")
+        int targetReps) {
     }
 
     @PostMapping
     public WorkoutPlanExercise createWorkoutPlanExercise(
             @PathVariable int workoutPlanId,
-            @RequestBody CreateWorkoutPlanExerciseRequest request) {
+            @Valid @RequestBody CreateWorkoutPlanExerciseRequest request) {
 
         return workoutPlanExerciseService.createWorkoutPlanExercise(
                 workoutPlanId,
@@ -45,7 +54,7 @@ public class WorkoutPlanExerciseController {
     public WorkoutPlanExercise updateWorkoutPlanExercise(
             @PathVariable int workoutPlanId,
             @PathVariable int workoutPlanExerciseId,
-            @RequestBody WorkoutPlanExercise updatedWorkoutPlanExercise) {
+            @Valid @RequestBody WorkoutPlanExercise updatedWorkoutPlanExercise) {
 
         return workoutPlanExerciseService.updateWorkoutPlanExercise(
                 workoutPlanId,

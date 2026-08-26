@@ -3,7 +3,7 @@ package com.diamond.workoutplanner.workoutplan;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.diamond.workoutplanner.exception.ResourceNotFoundException;
 import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExerciseRepository;
 
 /*
@@ -32,7 +32,10 @@ public class WorkoutPlanService {
     }
 
     public WorkoutPlan getWorkoutPlanById(int id) {
-        return workoutPlanRepository.findById(id).orElseThrow();
+        return workoutPlanRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                    "Workout plan not found with id: " + id
+            ));
     }
 
     public WorkoutPlan createWorkoutPlan(WorkoutPlan workoutPlan) {
