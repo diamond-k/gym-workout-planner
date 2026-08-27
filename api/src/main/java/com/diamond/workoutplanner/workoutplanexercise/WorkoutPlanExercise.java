@@ -29,11 +29,11 @@ public class WorkoutPlanExercise { // maps this class to the 'workout_plan_exerc
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
-    @Positive
+    @Positive(message = "Target sets must be greater than 0")
     @Column(nullable = false)
     private int targetSets;
 
-    @Positive
+    @Positive(message = "Target reps must be greater than 0")
     @Column(nullable = false)
     private int targetReps;
 

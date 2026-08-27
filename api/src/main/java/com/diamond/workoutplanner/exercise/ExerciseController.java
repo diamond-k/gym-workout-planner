@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.diamond.workoutplanner.exception.InvalidMuscleGroupException;
 import org.springframework.web.bind.annotation.RequestParam;
 
 // @RestController tells Spring: this class receives 
@@ -24,7 +25,13 @@ public class ExerciseController {
     }
 
     @GetMapping(params = "muscleGroup")
-    public List<Exercise> getExercisesByMuscleGroup(@RequestParam MuscleGroup muscleGroup) {
-        return exerciseService.getByMuscleGroup(muscleGroup);
+    public List<Exercise> getExercisesByMuscleGroup(@RequestParam String muscleGroup) {
+        try {      
+            MuscleGroup parsedMuscleGroup = MuscleGroup.valueOf(muscleGroup.toUpperCase());
+            return exerciseService.getByMuscleGroup(parsedMuscleGroup);
+        } catch (IllegalArgumentException exception) {
+            throw new InvalidMuscleGroupException(
+                    "Invalid muscle group: " + muscleGroup);
+        }
     }
 }

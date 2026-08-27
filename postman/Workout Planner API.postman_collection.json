@@ -1,0 +1,994 @@
+{
+  "info": {
+    "_postman_id": "fdd8b881-7bed-41a1-87eb-324d7f87f505",
+    "name": "Workout Planner API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48640079",
+    "_collection_link": "https://go.postman.co/collection/48640079-fdd8b881-7bed-41a1-87eb-324d7f87f505?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get all exercises",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/exercises",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "exercises"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get all exercises",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "exercises"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1192"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:34:00 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"name\": \"Bench Press\",\n        \"muscleGroup\": \"CHEST\",\n        \"instructions\": \"Lie on the bench, lower the bar towards your chest, then press it back up.\",\n        \"id\": 1\n    },\n    {\n        \"name\": \"Lat Pulldown\",\n        \"muscleGroup\": \"BACK\",\n        \"instructions\": \"Pull the bar towards your upper chest while keeping your torso controlled.\",\n        \"id\": 2\n    },\n    {\n        \"name\": \"Shoulder Press\",\n        \"muscleGroup\": \"SHOULDERS\",\n        \"instructions\": \"Press the weight overhead until your arms are extended, then lower with control.\",\n        \"id\": 3\n    },\n    {\n        \"name\": \"Bicep Curl\",\n        \"muscleGroup\": \"BICEPS\",\n        \"instructions\": \"Curl the weight towards your shoulders while keeping your elbows close to your body.\",\n        \"id\": 4\n    },\n    {\n        \"name\": \"Tricep Pushdown\",\n        \"muscleGroup\": \"TRICEPS\",\n        \"instructions\": \"Push the handle down until your arms are extended, then return with control.\",\n        \"id\": 5\n    },\n    {\n        \"name\": \"Leg Extension\",\n        \"muscleGroup\": \"LEGS\",\n        \"instructions\": \"Extend your knees until your legs are straight, then lower the weight slowly.\",\n        \"id\": 6\n    },\n    {\n        \"name\": \"Hip Thrust\",\n        \"muscleGroup\": \"GLUTES\",\n        \"instructions\": \"Drive through your feet and extend your hips until your torso and thighs form a straight line.\",\n        \"id\": 7\n    },\n    {\n        \"name\": \"Plank\",\n        \"muscleGroup\": \"CORE\",\n        \"instructions\": \"Hold your body in a straight line while keeping your core braced.\",\n        \"id\": 8\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Get exercises by muscle group",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/exercises?muscleGroup=back",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "exercises"
+          ],
+          "query": [
+            {
+              "key": "muscleGroup",
+              "value": "back"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get exercises by muscle group",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises?muscleGroup=back",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "exercises"
+              ],
+              "query": [
+                {
+                  "key": "muscleGroup",
+                  "value": "back"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "145"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:34:28 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"name\": \"Lat Pulldown\",\n        \"muscleGroup\": \"BACK\",\n        \"instructions\": \"Pull the bar towards your upper chest while keeping your torso controlled.\",\n        \"id\": 2\n    }\n]"
+        },
+        {
+          "name": "Get exercises by muscle group",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises?muscleGroup=Bpjoj",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "exercises"
+              ],
+              "query": [
+                {
+                  "key": "muscleGroup",
+                  "value": "Bpjoj"
+                }
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:41:57 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "Invalid muscle group: Bpjoj"
+        }
+      ]
+    },
+    {
+      "name": "Create workout plan",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Glute Day\",\n  \"description\": \"Glute-focused lower-body workout\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create workout plan",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Glute Day\",\n  \"description\": \"Glute-focused lower-body workout\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "117"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:35:10 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"name\": \"Glute Day\",\n    \"description\": \"Glute-focused lower-body workout\",\n    \"createdAt\": \"2026-08-27T01:35:10.179691\",\n    \"id\": 1\n}"
+        },
+        {
+          "name": "Create workout plan",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"Invalid example\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "27"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:43:13 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"name\": \"Name is required\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get all workout plans",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get all workout plans",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "119"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:35:35 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"name\": \"Glute Day\",\n        \"description\": \"Glute-focused lower-body workout\",\n        \"createdAt\": \"2026-08-27T01:35:10.179691\",\n        \"id\": 1\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Get workout plan by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "1"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get workout plan by id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "1"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "131"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:37:21 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"name\": \"Glute Day\",\n    \"description\": \"Glute-focused lower-body workout\",\n    \"createdAt\": \"2026-08-27T01:35:10.179691\",\n    \"id\": 1\n}"
+        },
+        {
+          "name": "Get workout plan by id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "999"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "35"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:42:25 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "Workout plan not found with id: 999"
+        }
+      ]
+    },
+    {
+      "name": "Update workout plan",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Glute Strength Day\",\n  \"description\": \"Glute-focused lower-body strength workout\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "1"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update workout plan",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Glute Strength Day\",\n  \"description\": \"Glute-focused lower-body strength workout\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "1"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "135"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:37:36 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"name\": \"Glute Strength Day\",\n    \"description\": \"Glute-focused lower-body strength workout\",\n    \"createdAt\": \"2026-08-27T01:35:10.179691\",\n    \"id\": 1\n}"
+        }
+      ]
+    },
+    {
+      "name": "Add exercise to workout plan",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"exerciseId\": 7,\n  \"targetSets\": 4,\n  \"targetReps\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "1",
+            "workout-plan-exercises"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Add exercise to workout plan",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"exerciseId\": 7,\n  \"targetSets\": 4,\n  \"targetReps\": 10\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "1",
+                "workout-plan-exercises"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "364"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:38:32 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"workoutPlan\": {\n        \"name\": \"Glute Strength Day\",\n        \"description\": \"Glute-focused lower-body strength workout\",\n        \"createdAt\": \"2026-08-27T01:35:10.179691\",\n        \"id\": 1\n    },\n    \"exercise\": {\n        \"name\": \"Hip Thrust\",\n        \"muscleGroup\": \"GLUTES\",\n        \"instructions\": \"Drive through your feet and extend your hips until your torso and thighs form a straight line.\",\n        \"id\": 7\n    },\n    \"targetSets\": 4,\n    \"targetReps\": 10,\n    \"id\": 1\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get workout plan exercises",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "1",
+            "workout-plan-exercises"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get workout plan exercises",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "1",
+                "workout-plan-exercises"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "366"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:39:05 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"workoutPlan\": {\n            \"name\": \"Glute Strength Day\",\n            \"description\": \"Glute-focused lower-body strength workout\",\n            \"createdAt\": \"2026-08-27T01:35:10.179691\",\n            \"id\": 1\n        },\n        \"exercise\": {\n            \"name\": \"Hip Thrust\",\n            \"muscleGroup\": \"GLUTES\",\n            \"instructions\": \"Drive through your feet and extend your hips until your torso and thighs form a straight line.\",\n            \"id\": 7\n        },\n        \"targetSets\": 4,\n        \"targetReps\": 10,\n        \"id\": 1\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Update workout plan exercise",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"targetSets\": 5,\n  \"targetReps\": 8\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "1",
+            "workout-plan-exercises",
+            "1"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update workout plan exercise",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetSets\": 5,\n  \"targetReps\": 8\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "1",
+                "workout-plan-exercises",
+                "1"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Content-Length",
+              "value": "363"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:40:08 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"workoutPlan\": {\n        \"name\": \"Glute Strength Day\",\n        \"description\": \"Glute-focused lower-body strength workout\",\n        \"createdAt\": \"2026-08-27T01:35:10.179691\",\n        \"id\": 1\n    },\n    \"exercise\": {\n        \"name\": \"Hip Thrust\",\n        \"muscleGroup\": \"GLUTES\",\n        \"instructions\": \"Drive through your feet and extend your hips until your torso and thighs form a straight line.\",\n        \"id\": 7\n    },\n    \"targetSets\": 5,\n    \"targetReps\": 8,\n    \"id\": 1\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete workout plan exercise",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "1",
+            "workout-plan-exercises",
+            "1"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete workout plan exercise",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/1/workout-plan-exercises/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "1",
+                "workout-plan-exercises",
+                "1"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:40:36 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "Delete workout plan",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "1"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete workout plan",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "1"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 27 Aug 2026 00:41:10 GMT"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}

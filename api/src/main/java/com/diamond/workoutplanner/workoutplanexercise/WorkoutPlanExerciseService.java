@@ -39,7 +39,7 @@ public class WorkoutPlanExerciseService {
         return workoutPlanExerciseRepository
                 .findByIdAndWorkoutPlanId(workoutPlanExerciseId, workoutPlanId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Workout plan exercise not found with id: " + workoutPlanExerciseId + " and workout plan id: "
+                        "Workout plan exercise not found with id: " + workoutPlanExerciseId + " and Workout plan id: "
                                 + workoutPlanId));
     }
 

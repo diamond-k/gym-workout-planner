@@ -33,4 +33,10 @@ public class GlobalExceptionHandler {
                         error.getDefaultMessage()));
         return errors;
     }
+
+    @ExceptionHandler(InvalidMuscleGroupException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleInvalidMuscleGroup(InvalidMuscleGroupException exception) {
+        return exception.getMessage();
+    }
 }
