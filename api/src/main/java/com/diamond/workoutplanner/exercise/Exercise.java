@@ -27,7 +27,6 @@ public class Exercise {
     @Column(length = 1000, nullable = false) // allows up to 1000 characters and makes instructions required
     private String instructions;
 
-    // JPA requires a default, no-argument constructor
     public Exercise() {
     }
 
