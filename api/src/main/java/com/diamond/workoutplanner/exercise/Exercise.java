@@ -15,7 +15,7 @@ public class Exercise {
 
     @Id // marks this field as the primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // lets MySQL automatically generate the ID
-    private int id;
+    private Integer id;
 
     @Column(nullable = false) // name is required and cannot be null
     private String name;

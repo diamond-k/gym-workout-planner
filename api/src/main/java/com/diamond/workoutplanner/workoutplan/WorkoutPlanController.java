@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.diamond.workoutplanner.workoutplan.dto.CreateWorkoutPlanRequest;
+import com.diamond.workoutplanner.workoutplan.dto.UpdateWorkoutPlanRequest;
+import com.diamond.workoutplanner.workoutplan.dto.WorkoutPlanResponse;
 
 @RestController
 @RequestMapping("/api/workout-plans")
@@ -22,27 +25,48 @@ public class WorkoutPlanController {
     }
 
     @GetMapping
-    public List<WorkoutPlan> getAllWorkoutPlans() {
-        return workoutPlanService.getAllWorkoutPlans();
+    public List<WorkoutPlanResponse> getAllWorkoutPlans() {
+        return workoutPlanService.getAllWorkoutPlans()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public WorkoutPlan getWorkoutPlanById(@PathVariable int id) {
-        return workoutPlanService.getWorkoutPlanById(id);
+    public WorkoutPlanResponse getWorkoutPlanById(@PathVariable int id) {
+        WorkoutPlan workoutPlan = workoutPlanService.getWorkoutPlanById(id);
+        return mapToResponse(workoutPlan);
     }
 
     @PostMapping
-    public WorkoutPlan createWorkoutPlan(@Valid @RequestBody WorkoutPlan workoutPlan) {
-        return workoutPlanService.createWorkoutPlan(workoutPlan);
+    public WorkoutPlanResponse createWorkoutPlan(@Valid @RequestBody CreateWorkoutPlanRequest request) {
+        WorkoutPlan createdWorkoutPlan = workoutPlanService.createWorkoutPlan(
+                        request.name(),
+                        request.description());
+        return mapToResponse(createdWorkoutPlan);
     }
 
     @PutMapping("/{id}")
-    public WorkoutPlan updateWorkoutPlan(@PathVariable int id, @Valid @RequestBody WorkoutPlan workoutPlan) {
-        return workoutPlanService.updateWorkoutPlan(id, workoutPlan);
+    public WorkoutPlanResponse updateWorkoutPlan(@PathVariable int id, @Valid @RequestBody UpdateWorkoutPlanRequest request) {
+        WorkoutPlan updatedWorkoutPlan = workoutPlanService.updateWorkoutPlan(
+                        id,
+                        request.name(),
+                        request.description());
+
+        return mapToResponse(updatedWorkoutPlan);
     }
 
     @DeleteMapping("/{id}")
     public void deleteWorkoutPlan(@PathVariable int id) {
         workoutPlanService.deleteWorkoutPlan(id);
+    }
+
+    private WorkoutPlanResponse mapToResponse(WorkoutPlan workoutPlan) {
+        return new WorkoutPlanResponse(
+                workoutPlan.getId(),
+                workoutPlan.getName(),
+                workoutPlan.getDescription(),
+                workoutPlan.getCreatedAt()
+        );
     }
 }

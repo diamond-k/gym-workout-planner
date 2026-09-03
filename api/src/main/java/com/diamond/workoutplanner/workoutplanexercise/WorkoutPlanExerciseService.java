@@ -2,7 +2,6 @@ package com.diamond.workoutplanner.workoutplanexercise;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
-
 import com.diamond.workoutplanner.exception.ResourceNotFoundException;
 import com.diamond.workoutplanner.exercise.Exercise;
 import com.diamond.workoutplanner.exercise.ExerciseRepository;
@@ -67,12 +66,20 @@ public class WorkoutPlanExerciseService {
         return workoutPlanExerciseRepository.save(workoutPlanExercise);
     }
 
-    public WorkoutPlanExercise updateWorkoutPlanExercise(int workoutPlanId, int workoutPlanExerciseId,
-            WorkoutPlanExercise updatedWorkoutPlanExercise) {
-        WorkoutPlanExercise existingWorkoutPlanExercise = getWorkoutPlanExerciseByIdAndWorkoutPlanId(
-                workoutPlanExerciseId, workoutPlanId);
-        existingWorkoutPlanExercise.setTargetReps(updatedWorkoutPlanExercise.getTargetReps());
-        existingWorkoutPlanExercise.setTargetSets(updatedWorkoutPlanExercise.getTargetSets());
+   public WorkoutPlanExercise updateWorkoutPlanExercise(
+        int workoutPlanId,
+        int workoutPlanExerciseId,
+        int targetSets,
+        int targetReps) {
+
+        WorkoutPlanExercise existingWorkoutPlanExercise =
+                getWorkoutPlanExerciseByIdAndWorkoutPlanId(
+                        workoutPlanExerciseId,
+                        workoutPlanId);
+
+        existingWorkoutPlanExercise.setTargetSets(targetSets);
+        existingWorkoutPlanExercise.setTargetReps(targetReps);
+
         return workoutPlanExerciseRepository.save(existingWorkoutPlanExercise);
     }
 

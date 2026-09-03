@@ -38,14 +38,15 @@ public class WorkoutPlanService {
             ));
     }
 
-    public WorkoutPlan createWorkoutPlan(WorkoutPlan workoutPlan) {
+    public WorkoutPlan createWorkoutPlan(String name, String description) {
+        WorkoutPlan workoutPlan = new WorkoutPlan(name, description);
         return workoutPlanRepository.save(workoutPlan);
     }
 
-    public WorkoutPlan updateWorkoutPlan(int id, WorkoutPlan updatedWorkoutPlan) {
+    public WorkoutPlan updateWorkoutPlan(int id, String name, String description) {
         WorkoutPlan existingWorkoutPlan = getWorkoutPlanById(id);
-        existingWorkoutPlan.setName(updatedWorkoutPlan.getName());
-        existingWorkoutPlan.setDescription(updatedWorkoutPlan.getDescription());
+        existingWorkoutPlan.setName(name);
+        existingWorkoutPlan.setDescription(description);
         return workoutPlanRepository.save(existingWorkoutPlan);
     }
 

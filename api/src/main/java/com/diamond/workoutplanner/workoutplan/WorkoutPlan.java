@@ -16,7 +16,7 @@ import jakarta.validation.constraints.Size;
 public class WorkoutPlan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @NotBlank(message = "Name is required")
     @Size(max = 255, message = "Workout plan name must be 255 characters or less")

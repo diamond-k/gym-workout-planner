@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.diamond.workoutplanner.exception.InvalidMuscleGroupException;
+import com.diamond.workoutplanner.exercise.dto.ExerciseResponse;
 import org.springframework.web.bind.annotation.RequestParam;
 
 // @RestController tells Spring: this class receives 
@@ -20,18 +21,36 @@ public class ExerciseController {
     }
 
     @GetMapping
-    public List<Exercise> getAllExercises() {
-        return exerciseService.getAllExercises();
+    public List<ExerciseResponse> getAllExercises() {
+        return exerciseService.getAllExercises()
+            .stream()
+            .map(this::mapToResponse)
+            .toList();
     }
 
     @GetMapping(params = "muscleGroup")
-    public List<Exercise> getExercisesByMuscleGroup(@RequestParam String muscleGroup) {
-        try {      
-            MuscleGroup parsedMuscleGroup = MuscleGroup.valueOf(muscleGroup.toUpperCase());
-            return exerciseService.getByMuscleGroup(parsedMuscleGroup);
+    public List<ExerciseResponse> getExercisesByMuscleGroup(@RequestParam String muscleGroup) {
+        try {
+            MuscleGroup parsedMuscleGroup =
+                    MuscleGroup.valueOf(muscleGroup.toUpperCase());
+
+            return exerciseService.getByMuscleGroup(parsedMuscleGroup)
+                    .stream()
+                    .map(this::mapToResponse)
+                    .toList();
+
         } catch (IllegalArgumentException exception) {
             throw new InvalidMuscleGroupException(
                     "Invalid muscle group: " + muscleGroup);
         }
+    }
+
+    private ExerciseResponse mapToResponse(Exercise exercise) {
+        return new ExerciseResponse(
+                exercise.getId(),
+                exercise.getName(),
+                exercise.getMuscleGroup(),
+                exercise.getInstructions()
+        );
     }
 }
