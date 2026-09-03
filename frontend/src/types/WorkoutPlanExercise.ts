@@ -1,10 +1,11 @@
-import type { Exercise } from './Exercise';
-import type { WorkoutPlan } from './WorkoutPlan';
+import type { MuscleGroup } from './MuscleGroup';
 
 export interface WorkoutPlanExercise {
   id: number;
-  exercise: Exercise;
-  workoutPlan: WorkoutPlan;
+  exerciseId: number;
+  exerciseName: string;
+  muscleGroup: MuscleGroup;
+  instructions: string;
   targetSets: number;
   targetReps: number;
 }
