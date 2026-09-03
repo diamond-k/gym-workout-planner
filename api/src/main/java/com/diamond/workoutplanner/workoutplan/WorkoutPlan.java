@@ -38,7 +38,7 @@ public class WorkoutPlan {
         this.description = description;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

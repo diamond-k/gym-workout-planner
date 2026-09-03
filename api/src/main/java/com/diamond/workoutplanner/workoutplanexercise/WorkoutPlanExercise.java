@@ -45,7 +45,7 @@ public class WorkoutPlanExercise {
         this.targetReps = targetReps;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

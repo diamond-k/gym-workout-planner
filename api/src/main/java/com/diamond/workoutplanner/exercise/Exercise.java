@@ -37,7 +37,7 @@ public class Exercise {
         this.instructions = instructions;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
