@@ -1,23 +1,13 @@
-import {Button, Container, Stack, Text, Title} from '@mantine/core';
+import Navbar from './components/Navbar';
+import Dashboard from './pages/Dashboard';
 
-function App(){
-
+function App() {
   return (
-    <Container>
-      <Stack>
-        <Title>
-          Workout Planner
-        </Title>
-        <Text>
-          Build and manage your workout plans
-        </Text>
-        <Button color='pink'>
-          Create Plan
-        </Button>
-      </Stack>      
-    </Container>
+    <>
+      <Navbar />
+      <Dashboard />
+    </>
   );
 }
-
 
 export default App;

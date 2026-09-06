@@ -1,0 +1,23 @@
+.navbar {
+  background-color: #1f1f1f;
+  color: white;
+}
+
+.accountName {
+  color: white;
+}
+
+.iconColour {
+  color: var(--mantine-color-pink-filled);
+}
+
+.avatarColour {
+  background: var(--mantine-color-pink-filled);
+  color: white;
+}
+
+@media (max-width: 430px) {
+  .accountName {
+    display: none;
+  }
+}
