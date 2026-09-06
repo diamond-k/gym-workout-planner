@@ -1,0 +1,30 @@
+.workoutPlanCard {
+  min-height: 250px;
+  height: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* first, third, fifth card */
+.workoutPlanCard:nth-child(odd) .workoutPlanCardIcon {
+  background: var(--mantine-color-pink-light);
+  color: var(--mantine-color-pink-6);
+}
+
+/* second, fourth, sixth card */
+.workoutPlanCard:nth-child(even) .workoutPlanCardIcon {
+  background: var(--mantine-color-violet-light);
+  color: var(--mantine-color-violet-6);
+}
+.workoutPlanCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--mantine-shadow-md);
+}
+
+.workoutPlanCard:nth-child(odd):hover {
+  border-color: var(--mantine-color-pink-4);
+}
+
+.workoutPlanCard:nth-child(even):hover {
+  border-color: var(--mantine-color-violet-4);
+}

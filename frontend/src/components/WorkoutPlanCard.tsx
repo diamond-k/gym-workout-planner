@@ -1,0 +1,36 @@
+import { Paper, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import { IconBarbell } from "@tabler/icons-react";
+import type { WorkoutPlan } from "../types/WorkoutPlan";
+import "./WorkoutPlanCard.css";
+
+interface WorkoutPlanCardProps {
+  workoutPlan: WorkoutPlan;
+}
+
+function WorkoutPlanCard({ workoutPlan }: WorkoutPlanCardProps) {
+  return (
+    <Paper withBorder shadow="sm" p="lg" radius="md" className="workoutPlanCard">
+      <Stack gap="xs" align="center">
+        <ThemeIcon size={64} radius="xl" variant="light" className="workoutPlanCardIcon" >
+          <IconBarbell size={30} />
+        </ThemeIcon>
+
+        <Title order={4} ta="center">
+          {workoutPlan.name}
+        </Title>
+
+        {workoutPlan.description && (
+          <Text c="dimmed" lineClamp={2} ta="center" w="100%">
+            {workoutPlan.description}
+          </Text>
+        )}
+
+        <Text size="sm" c="dimmed">
+          No exercises yet
+        </Text>
+      </Stack>
+    </Paper>
+  );
+}
+
+export default WorkoutPlanCard;

@@ -6,11 +6,11 @@ function Navbar() {
   return (
     <header className="navbar">
       <Container size="lg" py="sm">
-        <Group justify="space-between">
+        <Group justify="space-between">        
           <Group gap="xs">
-            <IconBarbellFilled className="iconColour" size={24} />
+            <IconBarbellFilled className="iconColour" size={32} />
             <Text fw={700}>Workout Planner</Text>
-          </Group>
+          </Group>  
           <Group gap="xs">
             <Avatar classNames={{ placeholder: 'avatarColour' }} radius="xl">
                 D

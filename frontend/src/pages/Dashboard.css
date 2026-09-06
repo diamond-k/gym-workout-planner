@@ -1,0 +1,13 @@
+.createPlanMobile {
+  display: none;
+}
+
+@media (max-width: 430px) {
+  .createPlanDesktop {
+    display: none;
+  }
+
+  .createPlanMobile {
+    display: flex;
+  }
+}
