@@ -3,6 +3,11 @@
   color: white;
 }
 
+.brandLink {
+  color: inherit;
+  text-decoration: none;
+}
+
 .accountName {
   color: white;
 }

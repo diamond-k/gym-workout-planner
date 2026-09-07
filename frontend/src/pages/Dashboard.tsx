@@ -1,21 +1,23 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+
 import {
+  ActionIcon,
   Button,
   Container,
-  SimpleGrid,
+  Group,
   Paper,
+  SimpleGrid,
   Stack,
   Text,
-  Title,
-  Group,
   ThemeIcon,
-  ActionIcon
+  Title,
 } from "@mantine/core";
-import { IconBarbell, IconPlus } from '@tabler/icons-react';
-import { useEffect, useState } from "react";
+import { IconBarbell, IconPlus } from "@tabler/icons-react";
+import WorkoutPlanCard from "../components/WorkoutPlanCard";
 import { api } from "../services/api";
 import type { WorkoutPlan } from "../types/WorkoutPlan";
-import WorkoutPlanCard from "../components/WorkoutPlanCard";
-import './Dashboard.css';
+import "./Dashboard.css";
 
 type RequestState<T> =
   | { status: "idle" }
@@ -27,7 +29,8 @@ function Dashboard() {
   const [state, setState] = useState<RequestState<WorkoutPlan[]>>({
     status: "loading",
   });
- // Load workout plans when the Dashboard first appears
+  const navigate = useNavigate();
+  // Load workout plans when the Dashboard first appears
   useEffect(() => {
     api
       .getWorkoutPlans()
@@ -63,19 +66,22 @@ function Dashboard() {
               <Text c="dimmed" ta="center">
                 Create your first workout plan to get started
               </Text>
-              <Button color="pink">Create Plan</Button>
+              <Button
+                color="pink"
+                onClick={() => navigate("/workout-plans/new")}
+              >
+                Create Plan
+              </Button>
             </Stack>
           </Paper>
         );
       }
       return (
-        <>
-          <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
-            {state.data.map((workoutPlan) => (
-              <WorkoutPlanCard key={workoutPlan.id} workoutPlan={workoutPlan} />
-            ))}
-          </SimpleGrid>
-        </>
+        <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
+          {state.data.map((workoutPlan) => (
+            <WorkoutPlanCard key={workoutPlan.id} workoutPlan={workoutPlan} />
+          ))}
+        </SimpleGrid>
       );
     }
     return null;
@@ -91,10 +97,20 @@ function Dashboard() {
           <Title order={2}>My Workout Plans</Title>
           {state.status === "success" && state.data.length > 0 ? (
             <>
-              <Button color="pink" className="createPlanDesktop">
+              <Button
+                color="pink"
+                className="createPlanDesktop"
+                onClick={() => navigate("/workout-plans/new")}
+              >
                 Create Plan
-              </Button>            
-              <ActionIcon color="pink" size="lg" className="createPlanMobile" aria-label="Create plan">
+              </Button>
+              <ActionIcon
+                color="pink"
+                size="lg"
+                className="createPlanMobile"
+                aria-label="Create plan"
+                onClick={() => navigate("/workout-plans/new")}
+              >
                 <IconPlus size={20} />
               </ActionIcon>
             </>
