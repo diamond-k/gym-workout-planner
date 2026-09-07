@@ -1,6 +1,7 @@
 package com.diamond.workoutplanner.workoutplanexercise;
 
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -13,7 +14,12 @@ import com.diamond.workoutplanner.exercise.Exercise;
 import com.diamond.workoutplanner.workoutplan.WorkoutPlan;
 
 @Entity
-@Table(name = "workout_plan_exercises")
+@Table(
+    name = "workout_plan_exercises",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {"workout_plan_id", "exercise_id"}
+    )
+)
 public class WorkoutPlanExercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

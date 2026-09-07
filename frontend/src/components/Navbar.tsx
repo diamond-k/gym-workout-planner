@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { Avatar, Container, Group, Text } from '@mantine/core';
 import { IconBarbellFilled } from '@tabler/icons-react';
-import './Navbar.css';
+import '../styles/Navbar.css';
 
 function Navbar() {
   return (

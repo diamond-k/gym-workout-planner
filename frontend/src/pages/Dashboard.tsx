@@ -17,7 +17,7 @@ import { IconBarbell, IconPlus } from "@tabler/icons-react";
 import WorkoutPlanCard from "../components/WorkoutPlanCard";
 import { api } from "../services/api";
 import type { WorkoutPlan } from "../types/WorkoutPlan";
-import "./Dashboard.css";
+import "../styles/Dashboard.css";
 
 type RequestState<T> =
   | { status: "idle" }
@@ -29,15 +29,25 @@ function Dashboard() {
   const [state, setState] = useState<RequestState<WorkoutPlan[]>>({
     status: "loading",
   });
+  const [exerciseCounts, setExerciseCounts] = useState<Record<number, number>>({});
   const navigate = useNavigate();
+
   // Load workout plans when the Dashboard first appears
   useEffect(() => {
     api
       .getWorkoutPlans()
-      .then((workoutPlans) => {
+      .then(async (workoutPlans) => {
         setState({ status: "success", data: workoutPlans });
-      })
+          const counts = await Promise.all(
+            workoutPlans.map(async (workoutPlan) => {
+              const exercises = await api.getWorkoutPlanExercises(workoutPlan.id);
+              return [workoutPlan.id, exercises.length] as const;
+            }),
+          );
+          setExerciseCounts(Object.fromEntries(counts));
+        })
       .catch((error: Error) => {
+        console.error(error)
         setState({ status: "error", error });
       });
   }, []);
@@ -79,7 +89,11 @@ function Dashboard() {
       return (
         <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }}>
           {state.data.map((workoutPlan) => (
-            <WorkoutPlanCard key={workoutPlan.id} workoutPlan={workoutPlan} />
+            <WorkoutPlanCard
+              key={workoutPlan.id}
+              workoutPlan={workoutPlan}
+              exerciseCount={exerciseCounts[workoutPlan.id] ?? 0}
+            />
           ))}
         </SimpleGrid>
       );
@@ -104,13 +118,13 @@ function Dashboard() {
               >
                 Create Plan
               </Button>
+              
               <ActionIcon
                 color="pink"
                 size="lg"
                 className="createPlanMobile"
                 aria-label="Create plan"
-                onClick={() => navigate("/workout-plans/new")}
-              >
+                onClick={() => navigate("/workout-plans/new")}>
                 <IconPlus size={20} />
               </ActionIcon>
             </>

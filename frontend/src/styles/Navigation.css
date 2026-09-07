@@ -1,0 +1,8 @@
+.backLink {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mantine-color-pink-6);
+  text-decoration: none;
+}

@@ -10,4 +10,6 @@ public interface WorkoutPlanExerciseRepository extends ListCrudRepository<Workou
     List<WorkoutPlanExercise> findByWorkoutPlanId(int workoutPlanId);
 
     Optional<WorkoutPlanExercise> findByIdAndWorkoutPlanId(int workoutPlanExerciseId, int workoutPlanId);
+
+    boolean existsByWorkoutPlan_IdAndExercise_Id(int workoutPlanId, int exerciseId);
 }

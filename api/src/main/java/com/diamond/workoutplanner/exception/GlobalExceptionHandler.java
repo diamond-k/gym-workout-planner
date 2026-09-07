@@ -39,4 +39,11 @@ public class GlobalExceptionHandler {
     public String handleInvalidMuscleGroup(InvalidMuscleGroupException exception) {
         return exception.getMessage();
     }
+
+    @ExceptionHandler(DuplicateWorkoutPlanExerciseException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public String handleDuplicateWorkoutPlanExercise(
+            DuplicateWorkoutPlanExerciseException exception) {
+        return exception.getMessage();
+    }
 }
