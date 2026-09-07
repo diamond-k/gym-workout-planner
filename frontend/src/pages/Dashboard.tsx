@@ -17,13 +17,8 @@ import { IconBarbell, IconPlus } from "@tabler/icons-react";
 import WorkoutPlanCard from "../components/WorkoutPlanCard";
 import { api } from "../services/api";
 import type { WorkoutPlan } from "../types/WorkoutPlan";
+import type { RequestState } from '../types/RequestState';
 import "../styles/Dashboard.css";
-
-type RequestState<T> =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: T }
-  | { status: "error"; error: Error };
 
 function Dashboard() {
   const [state, setState] = useState<RequestState<WorkoutPlan[]>>({
@@ -67,21 +62,25 @@ function Dashboard() {
         return (
           <Paper withBorder shadow="md" p="xl" radius="md">
             <Stack align="center" gap="sm">
+              
               <ThemeIcon size={64} radius="xl" variant="light" color="pink">
                 <IconBarbell size={30} color="var(--mantine-color-pink-6)" />
               </ThemeIcon>
+
               <Text fw={700} size="lg">
                 No workout plans yet
               </Text>
+
               <Text c="dimmed" ta="center">
                 Create your first workout plan to get started
               </Text>
+
               <Button
                 color="pink"
-                onClick={() => navigate("/workout-plans/new")}
-              >
+                onClick={() => navigate("/workout-plans/new")}>
                 Create Plan
               </Button>
+
             </Stack>
           </Paper>
         );

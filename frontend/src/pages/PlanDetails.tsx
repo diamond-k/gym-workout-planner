@@ -17,15 +17,10 @@ import { IconArrowLeft, IconPencil, IconTrash } from "@tabler/icons-react";
 import { api } from "../services/api";
 import type { WorkoutPlan } from "../types/WorkoutPlan";
 import type { WorkoutPlanExercise } from "../types/WorkoutPlanExercise";
+import type { RequestState } from '../types/RequestState';
 import { exerciseImages } from "../data/exerciseImages";
 import "../styles/Navigation.css";
 import "../styles/PlanDetails.css";
-
-type RequestState<T> =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: T }
-  | { status: "error"; error: Error };
 
 function PlanDetails() {
   const { id } = useParams();

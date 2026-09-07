@@ -14,6 +14,7 @@ function App() {
         <Route path="/workout-plans/new" element={<CreateEditWorkoutPlan />}/>
         <Route path="/workout-plans/:id" element={<PlanDetails />}/>
         <Route path="/workout-plans/:id/exercises/:workoutPlanExerciseId" element={<ExerciseDetails />}/>
+        <Route path="/workout-plans/:id/edit" element={<CreateEditWorkoutPlan/>}/>
       </Routes>
     </>
   );

@@ -13,14 +13,10 @@ import { IconArrowLeft } from "@tabler/icons-react";
 import { api } from "../services/api";
 import { exerciseImages } from "../data/exerciseImages";
 import type { WorkoutPlanExercise } from "../types/WorkoutPlanExercise";
+import type { RequestState } from '../types/RequestState';
 import "../styles/ExerciseDetails.css";
 import "../styles/Navigation.css";
 
-type RequestState<T> =
-  | { status: "idle" }
-  | { status: "loading" }
-  | { status: "success"; data: T }
-  | { status: "error"; error: Error };
 
 function ExerciseDetails() {
   const { id, workoutPlanExerciseId } = useParams();
