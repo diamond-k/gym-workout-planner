@@ -3,19 +3,23 @@ import { useNavigate, useParams, Link } from "react-router";
 import {
   Container,
   Paper,
+  Button,
   Stack,
   Text,
   Title,
   Image,
   Group,
   Anchor,
+  Modal,
+  ActionIcon,
 } from "@mantine/core";
-import { IconArrowLeft } from "@tabler/icons-react";
+import { IconArrowLeft, IconPencil, IconTrash } from "@tabler/icons-react";
 import { api } from "../services/api";
 import type { WorkoutPlan } from "../types/WorkoutPlan";
 import type { WorkoutPlanExercise } from "../types/WorkoutPlanExercise";
 import { exerciseImages } from "../data/exerciseImages";
 import "../styles/Navigation.css";
+import "../styles/PlanDetails.css";
 
 type RequestState<T> =
   | { status: "idle" }
@@ -26,15 +30,33 @@ type RequestState<T> =
 function PlanDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  function handleEditPlan() {
+    navigate(`/workout-plans/${id}/edit`);
+  }
+
+  async function handleDeletePlan() {
+    if (!id) {
+      return;
+    }
+
+    try {
+      await api.deleteWorkoutPlan(Number(id));
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      window.alert("Unable to delete workout plan. Please try again.");
+    }
+  }
+
   const [state, setState] = useState<RequestState<WorkoutPlan>>({
     status: "loading",
   });
 
-  const [exerciseState, setExerciseState] = useState<
-    RequestState<WorkoutPlanExercise[]>
-  >({
+  const [exerciseState, setExerciseState] = useState<RequestState<WorkoutPlanExercise[]>>({
     status: "loading",
   });
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   // Load the selected workout plan
   useEffect(() => {
@@ -99,8 +121,7 @@ function PlanDetails() {
       }
 
       return (
-        <Stack gap="sm">
-          
+        <Stack gap="sm">        
           {exerciseState.data.map((workoutPlanExercise) => (
             <Paper
               key={workoutPlanExercise.id}
@@ -112,8 +133,8 @@ function PlanDetails() {
                   `/workout-plans/${id}/exercises/${workoutPlanExercise.id}`,
                 )
               }
-              style={{ cursor: "pointer" }}
-            >
+              style={{ cursor: "pointer" }}>
+
               <Group gap="md" wrap="nowrap">
                 {exerciseImages[workoutPlanExercise.exerciseName] && (
                   <Image
@@ -145,7 +166,6 @@ function PlanDetails() {
         </Stack>
       );
     }
-
     return null;
   }
 
@@ -167,27 +187,95 @@ function PlanDetails() {
 
   if (state.status === "success") {
     return (
+      <>
+      <Modal
+        opened={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        title={<Text fw={700}>Delete workout plan?</Text>}
+        centered>
+        <Stack>
+          <Text>
+            Are you sure you want to delete "{state.data.name}"?
+            This action cannot be undone.
+          </Text>
+
+          <Group justify="flex-end">
+            <Button
+              variant="default"
+              onClick={() => setDeleteModalOpen(false)}>
+              Cancel
+            </Button>
+
+            <Button
+              color="pink"
+              onClick={handleDeletePlan}>
+              Delete
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+
       <Container size="lg" py="xl">
         <Stack gap="lg">
           <Anchor
             component={Link}
             to={`/`}
             className="backLink"
-            underline="never"
-          >
+            underline="never">
             <IconArrowLeft size={18} />
             Back to workout plans
           </Anchor>
-          <Title order={2}>{state.data.name}</Title>
 
+          <Group justify="space-between" align="flex-start" wrap="nowrap" className="planHeader">           
+            <Title order={2} className="planTitle">{state.data.name}</Title>
+            <Group gap="sm" wrap="nowrap" className="planActions">
+              {/* Desktop */}
+              <Button
+                variant="outline"
+                color="pink"
+                className="planActionDesktop"
+                onClick={handleEditPlan}>
+                Edit Plan
+              </Button>
+
+              <Button
+                color="pink"
+                className="planActionDesktop"
+                onClick={() => setDeleteModalOpen(true)}>
+                Delete Plan
+              </Button>
+
+              {/* Mobile */}
+              <ActionIcon
+                variant="outline"
+                color="pink"
+                size="lg"
+                className="planActionMobile"
+                aria-label="Edit plan"
+                onClick={handleEditPlan}>
+                <IconPencil size={18} />
+              </ActionIcon>
+
+              <ActionIcon
+                color="pink"
+                size="lg"
+                className="planActionMobile"
+                aria-label="Delete plan"
+                onClick={() => setDeleteModalOpen(true)}>
+                <IconTrash size={18} />
+              </ActionIcon>
+            </Group>
+          </Group>
+          
           {state.data.description && (
             <Text c="dimmed">{state.data.description}</Text> //TODO: Mobile only - add Show more / Show less for long plan descriptions.
           )}
+         
           <Title order={3}>Exercises</Title>
-
           {renderWorkoutPlanExercises()}
         </Stack>
       </Container>
+      </>
     );
   }
 

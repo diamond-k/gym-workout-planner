@@ -1,0 +1,23 @@
+.planActionMobile {
+  display: none;
+}
+
+.planTitle {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.planActions {
+  flex-shrink: 0;
+}
+
+@media (max-width: 430px) {
+  .planActionDesktop {
+    display: none;
+  }
+
+  .planActionMobile {
+    display: inline-flex;
+  }
+}

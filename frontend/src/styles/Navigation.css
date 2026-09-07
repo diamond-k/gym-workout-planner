@@ -6,3 +6,7 @@
   color: var(--mantine-color-pink-6);
   text-decoration: none;
 }
+
+.backLink:hover{
+  color: var(--mantine-color-pink-8);
+}
