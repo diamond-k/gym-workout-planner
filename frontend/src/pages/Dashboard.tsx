@@ -49,7 +49,7 @@ function Dashboard() {
     }
 
     if (state.status === "error") {
-      return <Text c="red">{state.error.message}</Text>;
+      return <Text c="red">Unable to load workout plans. Please try again.</Text>;
     }
 
     if (state.status === "success") {

@@ -39,11 +39,19 @@ function PlanDetails() {
   }, [id]);
 
   if (state.status === "loading") {
-    return <Text c="dimmed">Loading workout plan...</Text>;
+    return (
+      <Container size="lg" py="xl">
+        <Text c="dimmed">Loading workout plan...</Text>
+      </Container>
+    );
   }
 
   if (state.status === "error") {
-    return <Text c="red">{state.error.message}</Text>;
+    return (
+      <Container size="lg" py="xl">
+        <Text c="red">Unable to load workout plan. Please try again.</Text>
+      </Container>
+    );
   }
 
   if (state.status === "success") {
