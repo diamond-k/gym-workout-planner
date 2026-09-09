@@ -28,7 +28,7 @@ public class WorkoutPlanService {
     }
 
     public List<WorkoutPlan> getAllWorkoutPlans() {
-        return workoutPlanRepository.findAll();
+        return workoutPlanRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public WorkoutPlan getWorkoutPlanById(int id) {
@@ -45,8 +45,11 @@ public class WorkoutPlanService {
 
         WorkoutPlan workoutPlan = new WorkoutPlan(name, description);
         Set<Integer> exerciseIds = new HashSet<>();
-        for (CreateWorkoutPlanExerciseRequest requestExercise : exercises) {
 
+        for (int position = 0; position < exercises.size(); position++) {
+            
+            CreateWorkoutPlanExerciseRequest requestExercise = exercises.get(position);
+            
             if (!exerciseIds.add(requestExercise.exerciseId())) {
                 throw new DuplicateWorkoutPlanExerciseException(
                         "Exercise is already in this workout plan"
@@ -62,7 +65,8 @@ public class WorkoutPlanService {
                     workoutPlan,
                     exercise,
                     requestExercise.targetSets(),
-                    requestExercise.targetReps());
+                    requestExercise.targetReps(), 
+                    position);
 
             workoutPlan.addExercise(workoutPlanExercise);
         }
@@ -71,7 +75,10 @@ public class WorkoutPlanService {
     }
 
     @Transactional
-    public WorkoutPlan updateWorkoutPlan(int id, String name, String description,
+    public WorkoutPlan updateWorkoutPlan(
+            int id,
+            String name,
+            String description,
             List<CreateWorkoutPlanExerciseRequest> exercises) {
 
         WorkoutPlan workoutPlan = getWorkoutPlanById(id);
@@ -85,14 +92,17 @@ public class WorkoutPlanService {
         for (WorkoutPlanExercise workoutPlanExercise : workoutPlan.getExercises()) {
             existingExercises.put(
                     workoutPlanExercise.getExercise().getId(),
-                    workoutPlanExercise);
+                    workoutPlanExercise
+            );
         }
 
         // keep track of every exercise included in the edited plan
         Set<Integer> incomingExerciseIds = new HashSet<>();
 
-        for (CreateWorkoutPlanExerciseRequest requestExercise : exercises) {
+        for (int position = 0; position < exercises.size(); position++) {
 
+            // get the exercise at the position in list
+            CreateWorkoutPlanExerciseRequest requestExercise = exercises.get(position);
             int exerciseId = requestExercise.exerciseId();
 
             if (!incomingExerciseIds.add(exerciseId)) {
@@ -104,9 +114,10 @@ public class WorkoutPlanService {
             WorkoutPlanExercise existingExercise = existingExercises.get(exerciseId);
 
             if (existingExercise != null) {
-                // already in the plan - update its targets
+                // already in the plan - update its targets and position
                 existingExercise.setTargetSets(requestExercise.targetSets());
                 existingExercise.setTargetReps(requestExercise.targetReps());
+                existingExercise.setPosition(position);
 
             } else {
                 // new exercise - add it to the plan
@@ -114,20 +125,26 @@ public class WorkoutPlanService {
                         .orElseThrow(() -> new ResourceNotFoundException(
                                 "Exercise not found with id: " + exerciseId));
 
-                WorkoutPlanExercise newWorkoutPlanExercise = new WorkoutPlanExercise(
-                        workoutPlan,
-                        exercise,
-                        requestExercise.targetSets(),
-                        requestExercise.targetReps());
+                WorkoutPlanExercise newWorkoutPlanExercise =
+                        new WorkoutPlanExercise(
+                                workoutPlan,
+                                exercise,
+                                requestExercise.targetSets(),
+                                requestExercise.targetReps(),
+                                position
+                        );
 
                 workoutPlan.addExercise(newWorkoutPlanExercise);
             }
         }
 
-        // anything that existed before but is missing from the edited list is removed
+        // remove exercises that are no longer in the edited plan
         workoutPlan.getExercises().removeIf(
-                workoutPlanExercise -> !incomingExerciseIds.contains(
-                        workoutPlanExercise.getExercise().getId()));
+                workoutPlanExercise ->
+                        !incomingExerciseIds.contains(
+                                workoutPlanExercise.getExercise().getId()
+                        )
+        );
 
         return workoutPlanRepository.save(workoutPlan);
     }

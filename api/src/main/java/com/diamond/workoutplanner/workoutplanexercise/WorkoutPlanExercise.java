@@ -41,14 +41,18 @@ public class WorkoutPlanExercise {
     @Column(nullable = false)
     private int targetReps;
 
+    @Column(name = "exercise_order", nullable = false)
+    private int position;
+
     public WorkoutPlanExercise() {
     }
 
-    public WorkoutPlanExercise(WorkoutPlan workoutPlan, Exercise exercise, int targetSets, int targetReps) {
+    public WorkoutPlanExercise(WorkoutPlan workoutPlan, Exercise exercise, int targetSets, int targetReps, int position) {
         this.workoutPlan = workoutPlan;
         this.exercise = exercise;
         this.targetSets = targetSets;
         this.targetReps = targetReps;
+        this.position = position;
     }
 
     public Integer getId() {
@@ -77,5 +81,13 @@ public class WorkoutPlanExercise {
 
     public void setTargetReps(int targetReps) {
         this.targetReps = targetReps;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
