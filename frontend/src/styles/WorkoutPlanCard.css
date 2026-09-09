@@ -5,27 +5,121 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.workoutPlanCard:nth-child(2n + 1) .workoutPlanCardIcon {
-  background: var(--mantine-color-green-light);
-  color: var(--mantine-color-green-8)
-}
-
-.workoutPlanCard:nth-child(2n) .workoutPlanCardIcon {
-  background: var(--mantine-color-grape-light);
-  color: var(--mantine-color-grape-6);
-}
-
 .workoutPlanCard:hover {
   transform: translateY(-2px);
   box-shadow: var(--mantine-shadow-md);
 }
 
-.workoutPlanCard:nth-child(2n + 1):hover {
-  border-color: var(--mantine-color-pink-4);
+
+/* 1 COLUMN */
+
+.workoutPlanCard:nth-child(3n + 1) .workoutPlanCardIcon {
+  background: var(--mantine-color-green-light);
+  color: var(--mantine-color-green-8);
 }
 
-.workoutPlanCard:nth-child(2n):hover {
+.workoutPlanCard:nth-child(3n + 2) .workoutPlanCardIcon {
+  background: var(--mantine-color-grape-light);
+  color: var(--mantine-color-grape-6);
+}
+
+.workoutPlanCard:nth-child(3n) .workoutPlanCardIcon {
+  background: var(--mantine-color-pink-light);
+  color: var(--mantine-color-pink-6);
+}
+
+.workoutPlanCard:nth-child(3n + 1):hover {
+  border-color: var(--mantine-color-green-7);
+}
+
+.workoutPlanCard:nth-child(3n + 2):hover {
   border-color: var(--mantine-color-grape-4);
 }
 
-/* hover for green */
+.workoutPlanCard:nth-child(3n):hover {
+  border-color: var(--mantine-color-pink-4);
+}
+
+
+/* 2 COLUMNS */
+
+@media (min-width: 48em) and (max-width: 74.99em) {
+
+  .workoutPlanCard:nth-child(6n + 1) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(6n + 6) .workoutPlanCardIcon {
+    background: var(--mantine-color-green-light);
+    color: var(--mantine-color-green-8);
+  }
+
+  .workoutPlanCard:nth-child(6n + 2) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(6n + 3) .workoutPlanCardIcon {
+    background: var(--mantine-color-grape-light);
+    color: var(--mantine-color-grape-6);
+  }
+
+  .workoutPlanCard:nth-child(6n + 4) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(6n + 5) .workoutPlanCardIcon {
+    background: var(--mantine-color-pink-light);
+    color: var(--mantine-color-pink-6);
+  }
+
+  .workoutPlanCard:nth-child(6n + 1):hover,
+  .workoutPlanCard:nth-child(6n + 6):hover {
+    border-color: var(--mantine-color-green-7);
+  }
+
+  .workoutPlanCard:nth-child(6n + 2):hover,
+  .workoutPlanCard:nth-child(6n + 3):hover {
+    border-color: var(--mantine-color-grape-4);
+  }
+
+  .workoutPlanCard:nth-child(6n + 4):hover,
+  .workoutPlanCard:nth-child(6n + 5):hover {
+    border-color: var(--mantine-color-pink-4);
+  }
+}
+
+
+/* 3 COLUMNS */
+
+@media (min-width: 75em) {
+
+  .workoutPlanCard:nth-child(9n + 1) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(9n + 6) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(9n + 8) .workoutPlanCardIcon {
+    background: var(--mantine-color-green-light);
+    color: var(--mantine-color-green-8);
+  }
+
+  .workoutPlanCard:nth-child(9n + 2) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(9n + 4) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(9n + 9) .workoutPlanCardIcon {
+    background: var(--mantine-color-grape-light);
+    color: var(--mantine-color-grape-6);
+  }
+
+  .workoutPlanCard:nth-child(9n + 3) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(9n + 5) .workoutPlanCardIcon,
+  .workoutPlanCard:nth-child(9n + 7) .workoutPlanCardIcon {
+    background: var(--mantine-color-pink-light);
+    color: var(--mantine-color-pink-6);
+  }
+
+  .workoutPlanCard:nth-child(9n + 1):hover,
+  .workoutPlanCard:nth-child(9n + 6):hover,
+  .workoutPlanCard:nth-child(9n + 8):hover {
+    border-color: var(--mantine-color-green-7);
+  }
+
+  .workoutPlanCard:nth-child(9n + 2):hover,
+  .workoutPlanCard:nth-child(9n + 4):hover,
+  .workoutPlanCard:nth-child(9n + 9):hover {
+    border-color: var(--mantine-color-grape-4);
+  }
+
+  .workoutPlanCard:nth-child(9n + 3):hover,
+  .workoutPlanCard:nth-child(9n + 5):hover,
+  .workoutPlanCard:nth-child(9n + 7):hover {
+    border-color: var(--mantine-color-pink-4);
+  }
+}
