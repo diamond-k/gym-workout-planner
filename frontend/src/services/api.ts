@@ -3,19 +3,14 @@ import type { WorkoutPlan } from '../types/WorkoutPlan';
 import type { MuscleGroup } from '../types/MuscleGroup';
 import type { WorkoutPlanExercise } from '../types/WorkoutPlanExercise';
 /*
-  WorkoutPlan              = data returned from backend
-  WorkoutPlanInput         = data sent to create/update plan
+  WorkoutPlan               = data returned from backend
+  WorkoutPlanInput          = data sent when updating a whole workout plan
 
-  WorkoutPlanExercise      = data returned from backend
-  WorkoutPlanExerciseInput = data sent when adding one
-  WorkoutPlanExerciseUpdate = data sent when changing sets/reps
+  WorkoutPlanExercise       = data returned from backend
+  WorkoutPlanExerciseInput  = exercise data sent inside a plan or when adding one exercise
+  WorkoutPlanExerciseUpdate = data sent when changing sets/reps for one exercise
 */
 export type WorkoutPlanInput = {
-  name: string;
-  description: string | null;
-};
-
-export type CreateWorkoutPlanRequest = {
   name: string;
   description: string | null;
   exercises: WorkoutPlanExerciseInput[];
@@ -37,7 +32,7 @@ export interface Api {
 
   getWorkoutPlans(): Promise<WorkoutPlan[]>;
   getWorkoutPlan(id: number): Promise<WorkoutPlan>;
-  createWorkoutPlan(input: CreateWorkoutPlanRequest): Promise<WorkoutPlan>;
+  createWorkoutPlan(input: WorkoutPlanInput): Promise<WorkoutPlan>;
   updateWorkoutPlan(id: number, input: WorkoutPlanInput): Promise<WorkoutPlan>;
   deleteWorkoutPlan(id: number): Promise<void>;
 

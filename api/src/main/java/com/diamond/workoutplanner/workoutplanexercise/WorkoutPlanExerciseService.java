@@ -11,6 +11,17 @@ import com.diamond.workoutplanner.exercise.ExerciseRepository;
 import com.diamond.workoutplanner.workoutplan.WorkoutPlan;
 import com.diamond.workoutplanner.workoutplan.WorkoutPlanRepository;
 
+/*
+WorkoutPlanExerciseRepository
+- create/update/delete the WorkoutPlanExercise
+
+WorkoutPlanRepository
+- finds the workout plan it belongs to
+
+ExerciseRepository
+- finds the catalogue exercise being added
+*/
+
 @Service
 public class WorkoutPlanExerciseService {
 
@@ -27,6 +38,7 @@ public class WorkoutPlanExerciseService {
         this.exerciseRepository = exerciseRepository;
     }
 
+    // get a WorkoutPlanExercise by its ID and associated WorkoutPlan ID
     private WorkoutPlanExercise getWorkoutPlanExerciseByIdAndWorkoutPlanId(
             int workoutPlanExerciseId,
             int workoutPlanId) {
@@ -40,6 +52,7 @@ public class WorkoutPlanExerciseService {
                                 + workoutPlanId));
     }
 
+    // get all WorkoutPlanExercises associated with a specific WorkoutPlan
     public List<WorkoutPlanExercise> getWorkoutPlanExercisesByWorkoutPlanId(
             int workoutPlanId) {
 
@@ -50,6 +63,7 @@ public class WorkoutPlanExerciseService {
         return workoutPlanExerciseRepository.findByWorkoutPlanId(workoutPlanId);
     }
 
+    // create a new WorkoutPlanExercise
     public WorkoutPlanExercise createWorkoutPlanExercise(
             int workoutPlanId,
             int exerciseId,
@@ -76,6 +90,7 @@ public class WorkoutPlanExerciseService {
         return workoutPlanExerciseRepository.save(workoutPlanExercise);
     }
 
+    // update an existing WorkoutPlanExercise
     public WorkoutPlanExercise updateWorkoutPlanExercise(
             int workoutPlanId,
             int workoutPlanExerciseId,
@@ -93,6 +108,7 @@ public class WorkoutPlanExerciseService {
         return workoutPlanExerciseRepository.save(existingWorkoutPlanExercise);
     }
 
+    // delete a WorkoutPlanExercise
     public void deleteWorkoutPlanExercise(
             int workoutPlanId,
             int workoutPlanExerciseId) {

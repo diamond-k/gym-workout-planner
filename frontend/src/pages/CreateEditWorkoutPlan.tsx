@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import {
   Badge,
   Button,
@@ -23,6 +23,8 @@ import { exerciseImages } from '../data/exerciseImages';
 import type { Exercise } from '../types/Exercise';
 import type { MuscleGroup } from '../types/MuscleGroup';
 import type { RequestState } from '../types/RequestState';
+import type { WorkoutPlan } from '../types/WorkoutPlan';
+import type { WorkoutPlanExercise } from '../types/WorkoutPlanExercise';
 import '../styles/CreateEditWorkoutPlan.css';
 
 type SelectedExercise = {
@@ -30,6 +32,16 @@ type SelectedExercise = {
   targetSets: number | string;
   targetReps: number | string;
 };
+
+type EditLoadData = {
+  workoutPlan: WorkoutPlan;
+  workoutPlanExercises: WorkoutPlanExercise[];
+};
+
+interface FormErrors {
+  name?: string;
+  exercises?: string;
+}
 
 const muscleGroups: MuscleGroup[] = [
   'CHEST',
@@ -41,11 +53,6 @@ const muscleGroups: MuscleGroup[] = [
   'GLUTES',
   'CORE',
 ];
-
-interface FormErrors {
-  name?: string;
-  exercises?: string;
-}
 
 function CreateEditWorkoutPlan() {
   const [name, setName] = useState('');
@@ -59,9 +66,22 @@ function CreateEditWorkoutPlan() {
   
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const navigate = useNavigate();
 
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
+  const isEditMode = id !== undefined;
+
+  const [editState, setEditState] =
+  useState<RequestState<EditLoadData>>(
+    isEditMode
+      ? { status: 'loading' }
+      : { status: 'idle' }
+  );
+
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
+
+  // load the exercise catalogue for both create and edit
   useEffect(() => {
     api
       .getExercises()
@@ -73,13 +93,59 @@ function CreateEditWorkoutPlan() {
       })
       .catch((error: Error) => {
         console.error(error);
-
         setExerciseState({
           status: 'error',
           error,
         });
       });
   }, []);
+
+  // when editing, load the existing workout plan and its saved exercises
+  useEffect(() => {
+
+    if(!isEditMode || id === undefined){
+      return;
+    }
+
+    const planId = Number(id);
+
+    Promise.all([
+      api.getWorkoutPlan(planId),
+      api.getWorkoutPlanExercises(planId),
+    ])
+    .then(([workoutPlan, workoutPlanExercises]) => {
+      setName(workoutPlan.name);
+      setDescription(workoutPlan.description ?? '');
+
+      const selected = workoutPlanExercises.map((planExercise) => ({
+        exercise: {
+          id: planExercise.exerciseId,
+          name: planExercise.exerciseName,
+          muscleGroup: planExercise.muscleGroup,
+          instructions: planExercise.instructions
+        },
+        targetSets: planExercise.targetSets,
+        targetReps: planExercise.targetReps
+      }))
+
+      setSelectedExercises(selected);
+
+      setEditState({
+        status: 'success',
+        data: {
+          workoutPlan,
+          workoutPlanExercises,
+        },
+      });
+
+    }).catch((error: Error) => {
+      console.error(error);
+      setEditState({
+        status: 'error',
+        error,
+      });
+    });   
+  }, [id, isEditMode]);
 
   // derived array - recalculated whenever the component re-renders
   const availableExercises =
@@ -196,18 +262,25 @@ function CreateEditWorkoutPlan() {
     // tell React the form is currently being saved
     setSaving(true);
 
-    try {
-      const createdPlan = await api.createWorkoutPlan({
+    const planInput = {
         name: name.trim(),
         description: description.trim() || null,
         exercises: selectedExercises.map((selected) => ({
-          exerciseId: selected.exercise.id,
-          targetSets: Number(selected.targetSets),
-          targetReps: Number(selected.targetReps),
-        })),
-      });
+        exerciseId: selected.exercise.id,
+        targetSets: Number(selected.targetSets),
+        targetReps: Number(selected.targetReps)
+      })),
+    };
 
-      navigate(`/workout-plans/${createdPlan.id}`);
+    try {
+      if(isEditMode && id !== undefined){
+        const updatedPlan = await api.updateWorkoutPlan(Number(id), planInput);
+        navigate(`/workout-plans/${updatedPlan.id}`);
+
+      }else{
+        const createdPlan = await api.createWorkoutPlan(planInput);
+        navigate(`/workout-plans/${createdPlan.id}`);
+      }
     }
     catch(error){
       // if the POST fails, show user a readable error message.
@@ -221,7 +294,17 @@ function CreateEditWorkoutPlan() {
     <Container size="lg" py="xl">
       <form onSubmit={handleSubmit}>
         <Stack gap="xl">
-          <Title order={2}>Create Workout Plan</Title>
+          <Title order={2}> 
+            {isEditMode ? 'Edit Workout Plan' : 'Create Workout Plan'}
+          </Title>
+
+          {isEditMode && editState.status === 'loading' && (
+            <Text c="dimmed">Loading workout plan...</Text>
+          )}
+
+          {isEditMode && editState.status === 'error' && (
+            <Text c="red">Unable to load workout plan. Please try again.</Text>
+          )}
 
          <TextInput
             label="Name"

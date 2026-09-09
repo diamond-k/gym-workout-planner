@@ -14,15 +14,6 @@ import com.diamond.workoutplanner.exception.ResourceNotFoundException;
 import com.diamond.workoutplanner.workoutplanexercise.dto.CreateWorkoutPlanExerciseRequest;
 import com.diamond.workoutplanner.exercise.ExerciseRepository;
 
-/*
-WorkoutPlanRepository
-manages the WorkoutPlan entity
-
-WorkoutPlanExerciseRepository
-is needed because deleting a WorkoutPlan must first 
-delete the WorkoutPlanExercise records that belong to it
-*/
-
 @Service
 public class WorkoutPlanService {
 
@@ -54,9 +45,10 @@ public class WorkoutPlanService {
 
         for (CreateWorkoutPlanExerciseRequest requestExercise : exercises) {
 
-            Exercise exercise = exerciseRepository.findById(requestExercise.exerciseId())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Exercise not found with id: " + requestExercise.exerciseId()));
+            Exercise exercise = exerciseRepository
+            .findById(requestExercise.exerciseId())
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Exercise not found with id: " + requestExercise.exerciseId()));
 
             WorkoutPlanExercise workoutPlanExercise = new WorkoutPlanExercise(
                     workoutPlan,
