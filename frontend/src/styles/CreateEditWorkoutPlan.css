@@ -2,3 +2,31 @@
   height: 350px;
   overflow-y: auto;
 }
+
+.actionIcon {
+  display: none;
+}
+
+@media (max-width: 430px) {
+  .actionText {
+    display: none;
+  }
+
+  .actionIcon {
+    display: block;
+  }
+
+  .exerciseActionButton {
+    padding-inline: 10px;
+  }
+}
+
+.savePlanButton {
+  align-self: flex-end;
+}
+
+@media (max-width: 430px) {
+  .savePlanButton {
+    width: 100%;
+  }
+}

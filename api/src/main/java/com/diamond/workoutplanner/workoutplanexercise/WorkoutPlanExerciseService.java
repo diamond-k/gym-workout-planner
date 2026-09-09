@@ -11,17 +11,6 @@ import com.diamond.workoutplanner.exercise.ExerciseRepository;
 import com.diamond.workoutplanner.workoutplan.WorkoutPlan;
 import com.diamond.workoutplanner.workoutplan.WorkoutPlanRepository;
 
-/*
-WorkoutPlanExerciseRepository
-- create/update/delete the WorkoutPlanExercise
-
-WorkoutPlanRepository
-- finds the workout plan it belongs to
-
-ExerciseRepository
-- finds the catalogue exercise being added
-*/
-
 @Service
 public class WorkoutPlanExerciseService {
 
