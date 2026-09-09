@@ -1,12 +1,18 @@
 package com.diamond.workoutplanner.workoutplan;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import com.diamond.workoutplanner.exercise.Exercise;
+import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExercise;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.diamond.workoutplanner.exception.ResourceNotFoundException;
-import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExerciseRepository;
-import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExerciseService;
 import com.diamond.workoutplanner.workoutplanexercise.dto.CreateWorkoutPlanExerciseRequest;
+import com.diamond.workoutplanner.exercise.ExerciseRepository;
 
 /*
 WorkoutPlanRepository
@@ -21,15 +27,11 @@ delete the WorkoutPlanExercise records that belong to it
 public class WorkoutPlanService {
 
     private final WorkoutPlanRepository workoutPlanRepository;
-    private final WorkoutPlanExerciseRepository workoutPlanExerciseRepository;
-    private final WorkoutPlanExerciseService workoutPlanExerciseService;
+    private final ExerciseRepository exerciseRepository;
 
-    public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository,
-            WorkoutPlanExerciseRepository workoutPlanExerciseRepository,
-            WorkoutPlanExerciseService workoutPlanExerciseService) {
+    public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository, ExerciseRepository exerciseRepository) {
         this.workoutPlanRepository = workoutPlanRepository;
-        this.workoutPlanExerciseRepository = workoutPlanExerciseRepository;
-        this.workoutPlanExerciseService = workoutPlanExerciseService;
+        this.exerciseRepository = exerciseRepository;
     }
 
     public List<WorkoutPlan> getAllWorkoutPlans() {
@@ -38,9 +40,8 @@ public class WorkoutPlanService {
 
     public WorkoutPlan getWorkoutPlanById(int id) {
         return workoutPlanRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException(
-                    "Workout plan not found with id: " + id
-            ));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Workout plan not found with id: " + id));
     }
 
     @Transactional
@@ -49,34 +50,85 @@ public class WorkoutPlanService {
             String description,
             List<CreateWorkoutPlanExerciseRequest> exercises) {
 
-        // create and save the WorkoutPlan so it gets its database id
         WorkoutPlan workoutPlan = new WorkoutPlan(name, description);
-        WorkoutPlan savedWorkoutPlan = workoutPlanRepository.save(workoutPlan);
 
-        // then create each WorkoutPlanExercise using the new plan id
-        for (CreateWorkoutPlanExerciseRequest exercise : exercises) {
-            workoutPlanExerciseService.createWorkoutPlanExercise(
-                    savedWorkoutPlan.getId(),
-                    exercise.exerciseId(),
-                    exercise.targetSets(),
-                    exercise.targetReps()
-            );
+        for (CreateWorkoutPlanExerciseRequest requestExercise : exercises) {
+
+            Exercise exercise = exerciseRepository.findById(requestExercise.exerciseId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Exercise not found with id: " + requestExercise.exerciseId()));
+
+            WorkoutPlanExercise workoutPlanExercise = new WorkoutPlanExercise(
+                    workoutPlan,
+                    exercise,
+                    requestExercise.targetSets(),
+                    requestExercise.targetReps());
+
+            workoutPlan.addExercise(workoutPlanExercise);
         }
 
-        return savedWorkoutPlan;
+        return workoutPlanRepository.save(workoutPlan);
     }
 
-    public WorkoutPlan updateWorkoutPlan(int id, String name, String description) {
-        WorkoutPlan existingWorkoutPlan = getWorkoutPlanById(id);
-        existingWorkoutPlan.setName(name);
-        existingWorkoutPlan.setDescription(description);
-        return workoutPlanRepository.save(existingWorkoutPlan);
+    @Transactional
+    public WorkoutPlan updateWorkoutPlan(int id, String name, String description,
+            List<CreateWorkoutPlanExerciseRequest> exercises) {
+
+        WorkoutPlan workoutPlan = getWorkoutPlanById(id);
+
+        workoutPlan.setName(name);
+        workoutPlan.setDescription(description);
+
+        // store the exercises already in the plan, using exerciseId as the key
+        Map<Integer, WorkoutPlanExercise> existingExercises = new HashMap<>();
+
+        for (WorkoutPlanExercise workoutPlanExercise : workoutPlan.getExercises()) {
+            existingExercises.put(
+                    workoutPlanExercise.getExercise().getId(),
+                    workoutPlanExercise);
+        }
+
+        // keep track of every exercise included in the edited plan
+        Set<Integer> incomingExerciseIds = new HashSet<>();
+
+        for (CreateWorkoutPlanExerciseRequest requestExercise : exercises) {
+
+            int exerciseId = requestExercise.exerciseId();
+            incomingExerciseIds.add(exerciseId);
+            WorkoutPlanExercise existingExercise = existingExercises.get(exerciseId);
+
+            if (existingExercise != null) {
+                // already in the plan - update its targets
+                existingExercise.setTargetSets(requestExercise.targetSets());
+                existingExercise.setTargetReps(requestExercise.targetReps());
+
+            } else {
+                // new exercise - add it to the plan
+                Exercise exercise = exerciseRepository.findById(exerciseId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Exercise not found with id: " + exerciseId));
+
+                WorkoutPlanExercise newWorkoutPlanExercise = new WorkoutPlanExercise(
+                        workoutPlan,
+                        exercise,
+                        requestExercise.targetSets(),
+                        requestExercise.targetReps());
+
+                workoutPlan.addExercise(newWorkoutPlanExercise);
+            }
+        }
+
+        // anything that existed before but is missing from the edited list is removed
+        workoutPlan.getExercises().removeIf(
+                workoutPlanExercise -> !incomingExerciseIds.contains(
+                        workoutPlanExercise.getExercise().getId()));
+
+        return workoutPlanRepository.save(workoutPlan);
     }
 
     @Transactional
     public void deleteWorkoutPlan(int id) {
         WorkoutPlan existingWorkoutPlan = getWorkoutPlanById(id);
-        workoutPlanExerciseRepository.deleteAll(workoutPlanExerciseRepository.findByWorkoutPlanId(id));
         workoutPlanRepository.delete(existingWorkoutPlan);
     }
 }

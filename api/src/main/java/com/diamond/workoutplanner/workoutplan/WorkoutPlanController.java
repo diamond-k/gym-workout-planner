@@ -51,10 +51,11 @@ public class WorkoutPlanController {
 
     @PutMapping("/{id}")
     public WorkoutPlanResponse updateWorkoutPlan(@PathVariable int id, @Valid @RequestBody UpdateWorkoutPlanRequest request) {
-        WorkoutPlan updatedWorkoutPlan = workoutPlanService.updateWorkoutPlan(
-                        id,
-                        request.name(),
-                        request.description());
+       WorkoutPlan updatedWorkoutPlan = workoutPlanService.updateWorkoutPlan(
+        id,
+        request.name(),
+        request.description(),
+        request.exercises());
 
         return mapToResponse(updatedWorkoutPlan);
     }

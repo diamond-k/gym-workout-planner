@@ -10,6 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
+
+import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExercise;
 
 @Entity
 @Table(name = "workout_plans") // maps this class to the 'workout_plans' table
@@ -29,6 +36,13 @@ public class WorkoutPlan {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(
+        mappedBy = "workoutPlan",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<WorkoutPlanExercise> exercises = new ArrayList<>();
 
     public WorkoutPlan() {
     }
@@ -65,5 +79,17 @@ public class WorkoutPlan {
     @PrePersist
     public void setCreatedAt() {
         this.createdAt = LocalDateTime.now();
+    }
+    
+    public List<WorkoutPlanExercise> getExercises() {
+        return exercises;
+    }
+
+    public void addExercise(WorkoutPlanExercise workoutPlanExercise) {
+        exercises.add(workoutPlanExercise);
+    }
+
+    public void removeExercise(WorkoutPlanExercise workoutPlanExercise) {
+        exercises.remove(workoutPlanExercise);
     }
 }
