@@ -7,6 +7,35 @@
   display: none;
 }
 
+.savePlanButton {
+  align-self: flex-end;
+}
+
+.availableExerciseCard,
+.selectedExerciseCard {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-md);
+}
+
+.exerciseIdentity {
+  flex: 1;
+  min-width: 0;
+}
+
+.selectedExerciseCard {
+  flex-wrap: wrap;
+}
+
+.selectedExerciseDivider,
+.exerciseTargets {
+  width: 100%;
+}
+
+.targetInput {
+  width: 70px;
+}
+
 @media (max-width: 430px) {
   .actionText {
     display: none;
@@ -19,14 +48,63 @@
   .exerciseActionButton {
     padding-inline: 10px;
   }
-}
 
-.savePlanButton {
-  align-self: flex-end;
-}
-
-@media (max-width: 430px) {
   .savePlanButton {
     width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .availableExerciseCard {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selectedExerciseCard {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+  }
+
+  .selectedExerciseCard .exerciseIdentity {
+    order: 1;
+  }
+
+  .selectedExerciseDivider {
+    order: 2;
+  }
+
+  .exerciseTargets {
+    order: 3;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .targetRow {
+    width: 100%;
+  }
+
+  .targetInput {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .exerciseActionButton {
+    width: 100%;
+  }
+
+  .selectedExerciseCard .exerciseActionButton {
+    order: 4;
+  }
+
+  /* change icon buttons back to words on very small screens */
+  .actionText {
+    display: inline;
+  }
+
+  .actionIcon {
+    display: none;
   }
 }

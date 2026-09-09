@@ -58,6 +58,7 @@ function Dashboard() {
     }
 
     if (state.status === "success") {
+      // no workout plan yet
       if (state.data.length === 0) {
         return (
           <Paper withBorder shadow="md" p="xl" radius="md">
@@ -103,11 +104,10 @@ function Dashboard() {
   return (
     <Container size="lg" py="xl">
       <Stack gap="xl">
-        <Text c="dimmed" size="lg">
+        <Group justify="space-between">
+           <Text c="gray.7" size="lg">
           Build your next workout
         </Text>
-        <Group justify="space-between">
-          <Title order={2}>My Workout Plans</Title>
           {state.status === "success" && state.data.length > 0 ? (
             <>
               <Button
@@ -128,6 +128,7 @@ function Dashboard() {
             </>
           ) : null}
         </Group>
+        <Title order={2}>My Workout Plans</Title>
         {renderWorkoutPlans()}
       </Stack>
     </Container>

@@ -6,8 +6,8 @@
 }
 
 .workoutPlanCard:nth-child(2n + 1) .workoutPlanCardIcon {
-  background: var(--mantine-color-pink-light);
-  color: var(--mantine-color-pink-6);
+  background: var(--mantine-color-green-light);
+  color: var(--mantine-color-green-8)
 }
 
 .workoutPlanCard:nth-child(2n) .workoutPlanCardIcon {
@@ -27,3 +27,5 @@
 .workoutPlanCard:nth-child(2n):hover {
   border-color: var(--mantine-color-grape-4);
 }
+
+/* hover for green */
