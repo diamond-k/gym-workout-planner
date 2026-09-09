@@ -40,9 +40,12 @@ public class WorkoutPlanController {
 
     @PostMapping
     public WorkoutPlanResponse createWorkoutPlan(@Valid @RequestBody CreateWorkoutPlanRequest request) {
+        
         WorkoutPlan createdWorkoutPlan = workoutPlanService.createWorkoutPlan(
-                        request.name(),
-                        request.description());
+                request.name(),
+                request.description(),
+                request.exercises()
+        );
         return mapToResponse(createdWorkoutPlan);
     }
 

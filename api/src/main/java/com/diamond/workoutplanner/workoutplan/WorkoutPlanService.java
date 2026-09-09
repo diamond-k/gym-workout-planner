@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.diamond.workoutplanner.exception.ResourceNotFoundException;
 import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExerciseRepository;
+import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExerciseService;
+import com.diamond.workoutplanner.workoutplanexercise.dto.CreateWorkoutPlanExerciseRequest;
 
 /*
 WorkoutPlanRepository
@@ -20,11 +22,14 @@ public class WorkoutPlanService {
 
     private final WorkoutPlanRepository workoutPlanRepository;
     private final WorkoutPlanExerciseRepository workoutPlanExerciseRepository;
+    private final WorkoutPlanExerciseService workoutPlanExerciseService;
 
     public WorkoutPlanService(WorkoutPlanRepository workoutPlanRepository,
-            WorkoutPlanExerciseRepository workoutPlanExerciseRepository) {
+            WorkoutPlanExerciseRepository workoutPlanExerciseRepository,
+            WorkoutPlanExerciseService workoutPlanExerciseService) {
         this.workoutPlanRepository = workoutPlanRepository;
         this.workoutPlanExerciseRepository = workoutPlanExerciseRepository;
+        this.workoutPlanExerciseService = workoutPlanExerciseService;
     }
 
     public List<WorkoutPlan> getAllWorkoutPlans() {
@@ -38,9 +43,27 @@ public class WorkoutPlanService {
             ));
     }
 
-    public WorkoutPlan createWorkoutPlan(String name, String description) {
+    @Transactional
+    public WorkoutPlan createWorkoutPlan(
+            String name,
+            String description,
+            List<CreateWorkoutPlanExerciseRequest> exercises) {
+
+        // create and save the WorkoutPlan so it gets its database id
         WorkoutPlan workoutPlan = new WorkoutPlan(name, description);
-        return workoutPlanRepository.save(workoutPlan);
+        WorkoutPlan savedWorkoutPlan = workoutPlanRepository.save(workoutPlan);
+
+        // then create each WorkoutPlanExercise using the new plan id
+        for (CreateWorkoutPlanExerciseRequest exercise : exercises) {
+            workoutPlanExerciseService.createWorkoutPlanExercise(
+                    savedWorkoutPlan.getId(),
+                    exercise.exerciseId(),
+                    exercise.targetSets(),
+                    exercise.targetReps()
+            );
+        }
+
+        return savedWorkoutPlan;
     }
 
     public WorkoutPlan updateWorkoutPlan(int id, String name, String description) {
