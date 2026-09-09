@@ -15,8 +15,8 @@ import {
 } from "@mantine/core";
 import { IconArrowLeft, IconPencil, IconTrash } from "@tabler/icons-react";
 import { api } from "../services/api";
-import type { WorkoutPlan } from "../types/WorkoutPlan";
-import type { WorkoutPlanExercise } from "../types/WorkoutPlanExercise";
+import type { WorkoutPlanResponse } from "../types/WorkoutPlanResponse";
+import type { WorkoutPlanExerciseResponse } from "../types/WorkoutPlanExerciseResponse";
 import type { RequestState } from '../types/RequestState';
 import { exerciseImages } from "../data/exerciseImages";
 import "../styles/Navigation.css";
@@ -44,11 +44,11 @@ function PlanDetails() {
     }
   }
 
-  const [state, setState] = useState<RequestState<WorkoutPlan>>({
+  const [state, setState] = useState<RequestState<WorkoutPlanResponse>>({
     status: "loading",
   });
 
-  const [exerciseState, setExerciseState] = useState<RequestState<WorkoutPlanExercise[]>>({
+  const [exerciseState, setExerciseState] = useState<RequestState<WorkoutPlanExerciseResponse[]>>({
     status: "loading",
   });
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);

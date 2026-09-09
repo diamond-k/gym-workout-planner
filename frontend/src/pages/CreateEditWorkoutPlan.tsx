@@ -23,8 +23,8 @@ import { exerciseImages } from '../data/exerciseImages';
 import type { Exercise } from '../types/Exercise';
 import type { MuscleGroup } from '../types/MuscleGroup';
 import type { RequestState } from '../types/RequestState';
-import type { WorkoutPlan } from '../types/WorkoutPlan';
-import type { WorkoutPlanExercise } from '../types/WorkoutPlanExercise';
+import type { WorkoutPlanResponse } from '../types/WorkoutPlanResponse';
+import type { WorkoutPlanExerciseResponse } from '../types/WorkoutPlanExerciseResponse';
 import '../styles/CreateEditWorkoutPlan.css';
 
 type SelectedExercise = {
@@ -34,8 +34,8 @@ type SelectedExercise = {
 };
 
 type EditLoadData = {
-  workoutPlan: WorkoutPlan;
-  workoutPlanExercises: WorkoutPlanExercise[];
+  workoutPlan: WorkoutPlanResponse;
+  workoutPlanExercises: WorkoutPlanExerciseResponse[];
 };
 
 interface FormErrors {

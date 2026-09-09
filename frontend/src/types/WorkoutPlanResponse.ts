@@ -1,4 +1,4 @@
-export interface WorkoutPlan {
+export interface WorkoutPlanResponse {
     id: number;
     name: string;
     description: string | null;

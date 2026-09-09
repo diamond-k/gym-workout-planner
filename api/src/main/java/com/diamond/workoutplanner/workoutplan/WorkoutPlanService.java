@@ -10,6 +10,8 @@ import com.diamond.workoutplanner.exercise.Exercise;
 import com.diamond.workoutplanner.workoutplanexercise.WorkoutPlanExercise;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.diamond.workoutplanner.exception.DuplicateWorkoutPlanExerciseException;
 import com.diamond.workoutplanner.exception.ResourceNotFoundException;
 import com.diamond.workoutplanner.workoutplanexercise.dto.CreateWorkoutPlanExerciseRequest;
 import com.diamond.workoutplanner.exercise.ExerciseRepository;
@@ -42,8 +44,14 @@ public class WorkoutPlanService {
             List<CreateWorkoutPlanExerciseRequest> exercises) {
 
         WorkoutPlan workoutPlan = new WorkoutPlan(name, description);
-
+        Set<Integer> exerciseIds = new HashSet<>();
         for (CreateWorkoutPlanExerciseRequest requestExercise : exercises) {
+
+            if (!exerciseIds.add(requestExercise.exerciseId())) {
+                throw new DuplicateWorkoutPlanExerciseException(
+                        "Exercise is already in this workout plan"
+                );
+            }
 
             Exercise exercise = exerciseRepository
             .findById(requestExercise.exerciseId())
@@ -86,7 +94,13 @@ public class WorkoutPlanService {
         for (CreateWorkoutPlanExerciseRequest requestExercise : exercises) {
 
             int exerciseId = requestExercise.exerciseId();
-            incomingExerciseIds.add(exerciseId);
+
+            if (!incomingExerciseIds.add(exerciseId)) {
+                throw new DuplicateWorkoutPlanExerciseException(
+                        "Exercise is already in this workout plan"
+                );
+            }
+
             WorkoutPlanExercise existingExercise = existingExercises.get(exerciseId);
 
             if (existingExercise != null) {

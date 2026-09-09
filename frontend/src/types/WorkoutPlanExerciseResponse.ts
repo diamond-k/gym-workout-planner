@@ -1,6 +1,6 @@
 import type { MuscleGroup } from './MuscleGroup';
 
-export interface WorkoutPlanExercise {
+export interface WorkoutPlanExerciseResponse {
   id: number;
   exerciseId: number;
   exerciseName: string;

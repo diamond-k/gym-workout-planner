@@ -12,7 +12,7 @@ import {
 import { IconArrowLeft } from "@tabler/icons-react";
 import { api } from "../services/api";
 import { exerciseImages } from "../data/exerciseImages";
-import type { WorkoutPlanExercise } from "../types/WorkoutPlanExercise";
+import type { WorkoutPlanExerciseResponse } from "../types/WorkoutPlanExerciseResponse";
 import type { RequestState } from '../types/RequestState';
 import "../styles/ExerciseDetails.css";
 import "../styles/Navigation.css";
@@ -21,7 +21,7 @@ import "../styles/Navigation.css";
 function ExerciseDetails() {
   const { id, workoutPlanExerciseId } = useParams();
 
-  const [state, setState] = useState<RequestState<WorkoutPlanExercise>>({
+  const [state, setState] = useState<RequestState<WorkoutPlanExerciseResponse>>({
     status: "loading",
   });
 

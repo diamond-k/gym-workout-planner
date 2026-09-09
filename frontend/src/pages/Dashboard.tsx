@@ -16,12 +16,12 @@ import {
 import { IconBarbell, IconPlus } from "@tabler/icons-react";
 import WorkoutPlanCard from "../components/WorkoutPlanCard";
 import { api } from "../services/api";
-import type { WorkoutPlan } from "../types/WorkoutPlan";
+import type { WorkoutPlanResponse } from "../types/WorkoutPlanResponse";
 import type { RequestState } from '../types/RequestState';
 import "../styles/Dashboard.css";
 
 function Dashboard() {
-  const [state, setState] = useState<RequestState<WorkoutPlan[]>>({
+  const [state, setState] = useState<RequestState<WorkoutPlanResponse[]>>({
     status: "loading",
   });
   const [exerciseCounts, setExerciseCounts] = useState<Record<number, number>>({});

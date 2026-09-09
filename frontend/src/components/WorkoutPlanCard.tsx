@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router";
 import { Paper, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconBarbell } from "@tabler/icons-react";
-import type { WorkoutPlan } from "../types/WorkoutPlan";
+import type { WorkoutPlanResponse } from "../types/WorkoutPlanResponse";
 import "../styles/WorkoutPlanCard.css";
 
 interface WorkoutPlanCardProps {
-  workoutPlan: WorkoutPlan;
+  workoutPlan: WorkoutPlanResponse;
   exerciseCount: number;
 }
 
