@@ -113,8 +113,7 @@ function Dashboard() {
               <Button
                 color="pink"
                 className="createPlanDesktop"
-                onClick={() => navigate("/workout-plans/new")}
-              >
+                onClick={() => navigate("/workout-plans/new")}>
                 Create Plan
               </Button>
               

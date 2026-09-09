@@ -40,6 +40,10 @@ const muscleGroups: MuscleGroup[] = [
   'CORE',
 ];
 
+interface FormErrors{
+  name?: string;
+}
+
 function CreateEditWorkoutPlan() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -49,6 +53,10 @@ function CreateEditWorkoutPlan() {
     useState<RequestState<Exercise[]>>({
       status: 'loading',
     });
+  
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [formErrors, setFormErrors] = useState<FormErrors>({});
 
   useEffect(() => {
     api
@@ -69,24 +77,39 @@ function CreateEditWorkoutPlan() {
       });
   }, []);
 
+  // derived array - recalculated whenever the component re-renders
   const availableExercises =
     exerciseState.status === 'success'
       ? exerciseState.data.filter((exercise) => {
-          const isAlreadySelected = selectedExercises.some(
-            (selected) => selected.exercise.id === exercise.id,
-          );
+        
+        // check whether this exercise is already in the selected list
+        const isAlreadySelected = 
+          selectedExercises.some((selected) => selected.exercise.id === exercise.id);
 
-          const matchesMuscleGroup =
-            selectedMuscleGroup === null ||
-            exercise.muscleGroup === selectedMuscleGroup;
+        // check the muscle group filter
+        // if no muscle group is selected (null), show all exercises
+        // or, only show exercises matching the selected muscle group
+        const matchesMuscleGroup =
+          selectedMuscleGroup === null ||
+          exercise.muscleGroup === selectedMuscleGroup;
 
+          // only include the exercise if:
+          // it is NOT already in the plan, AND
+          // it matches the current muscle group filter
           return !isAlreadySelected && matchesMuscleGroup;
         })
+        .sort((a,b) => a.name.localeCompare(b.name))
       : [];
 
+  // add the clicked exercise to selectedExercises
   function handleAddExercise(exercise: Exercise) {
-    setSelectedExercises((current) => [
-      ...current,
+    // React calls the function setSelectedExercises
+    // the paramter exercises is the current value of selectedExercises 
+    // at the moment React performs this update
+    setSelectedExercises((exercises) => [
+      // keep all exercises already in the plan...
+      ...exercises,
+      // then add this new exercise, with starting sets/reps values
       {
         exercise,
         targetSets: 3,
@@ -95,206 +118,281 @@ function CreateEditWorkoutPlan() {
     ]);
   }
 
+  // remove the clicked exercise from selectedExercises
   function handleRemoveExercise(exerciseId: number) {
-    setSelectedExercises((current) =>
-      current.filter((item) => item.exercise.id !== exerciseId),
+    setSelectedExercises((exercises) =>
+      // keep every selected exercise EXCEPT the one whose id matches exerciseId.
+      exercises.filter((item) => item.exercise.id !== exerciseId),
     );
   }
 
-  function handleUpdateTargets(
-    exerciseId: number,
-    field: 'targetSets' | 'targetReps', 
-    value: number | string) {
-    setSelectedExercises((current) =>
-      current.map((item) =>
-        item.exercise.id === exerciseId ? { ...item, [field]: value } : item
+  // update either the sets or reps for one exercise already in the plan
+  function handleUpdateTargets(exerciseId: number, field: 'targetSets' | 'targetReps', value: number | string) {
+    // React provides the current selectedExercises array
+    setSelectedExercises((exercises) =>
+      // map() goes through every selected exercise and creates a new array
+      exercises.map((item) => 
+        // if this is the exercise being edited...
+        item.exercise.id === exerciseId 
+        // ...create a new copy of that exercise item
+        // ...item - keep all of the item's existing properties
+        // [field]: value - change only the field passed in:
+        // either targetSets or targetReps
+        ? { ...item, [field]: value } 
+        : item
       )
     );
   }
 
+  function validate(planName: string): FormErrors {
+    // create an empty object to store any validation errors
+    const errors: FormErrors = {};
+
+    // if name is empty after removing spaces, add a name error
+    if (planName.trim() === '') {
+      errors.name = 'Name is required.';
+    }
+
+    // return the errors object back to calling function
+    return errors;
+  }
+
+  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+    // stop browser doing its default form submission/reload
+    event.preventDefault();
+
+    // pass the current name state into validate()
+    // validate() returns either {} or an object containing validation errors
+    const nextErrors = validate(name);
+
+    // store returned validation errors in React state
+    // so they can be displayed in the form
+    setFormErrors(nextErrors);
+
+    // Object.keys() gets the property names from nextErrors.
+    // if there is at least one property, there is at least one error
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
+
+    // clear any error from a previous save attempt
+    setError('');
+
+    // tell React the form is currently being saved
+    setSaving(true);
+
+    try {
+      // send the plan name and description to the backend.
+      // The backend creates the plan and returns the created WorkoutPlan
+      // const createdPlan = await api.createWorkoutPlan({
+      //   name: name.trim(),
+      //   description: description.trim() || null,
+      // });
+      //  console.log(createdPlan);
+    }
+    catch(error){
+      // if the POST fails, show user a readable error message.
+      setError(`Unable to save workout plan: ${(error as Error).message}`);
+    }
+    finally{
+      setSaving(false);
+    }
+  }
   return (
     <Container size="lg" py="xl">
-      <Stack gap="xl">
-        <Title order={2}>Create Workout Plan</Title>
+      <form onSubmit={handleSubmit}>
+        <Stack gap="xl">
+          <Title order={2}>Create Workout Plan</Title>
 
-        <TextInput
-          label="Name"
-          placeholder="e.g. Upper Body Day"
-          value={name}
-          onChange={(event) => setName(event.currentTarget.value)}
-          required
-        />
+         <TextInput
+            label="Name"
+            placeholder="e.g. Upper Body Day"
+            value={name}
+            onChange={(event) => {
+              setName(event.currentTarget.value);
+              // clear the name validation error as soon as the user starts fixing it
+              setFormErrors((errors) => ({
+                ...errors,
+                name: undefined,
+              }));
+            }}
+            // tells Mantine to show the validation message under the input
+            error={formErrors.name}
+            withAsterisk/>
 
-        <Textarea
-          label="Description"
-          placeholder="Add an optional description"
-          value={description}
-          onChange={(event) => setDescription(event.currentTarget.value)}
-          minRows={3}
-        />
-        <Select
-          label="Filter by muscle group"
-          placeholder="All"
-          data={muscleGroups}
-          value={selectedMuscleGroup}
-          onChange={(value) =>
-            setSelectedMuscleGroup(value as MuscleGroup | null)
-          }
-          searchable
-          clearable/>
+          <Textarea
+            label="Description"
+            placeholder="Add an optional description"
+            value={description}
+            onChange={(event) => setDescription(event.currentTarget.value)}
+            minRows={3}
+          />
+          <Select
+            label="Filter by muscle group"
+            placeholder="All"
+            data={muscleGroups}
+            value={selectedMuscleGroup}
+            onChange={(value) =>
+              setSelectedMuscleGroup(value as MuscleGroup | null)
+            }
+            searchable
+            clearable/>
 
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">        
-          {/*Available exercises*/}
-          <Stack gap="md">
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing="xl">        
+            {/*Available exercises*/}
+            <Stack gap="md">
 
-            <Title order={3}>Choose Exercises</Title>
+              <Title order={3}>Choose Exercises</Title>
+                <Paper withBorder p="md" radius="md" className="exerciseList">
+                  <Stack gap="sm">
+                    {exerciseState.status === 'loading' && (
+                      <Text c="dimmed">Loading exercises...</Text>
+                    )}
+
+                    {exerciseState.status === 'error' && (
+                      <Text c="red">Unable to load exercises. Please try again.</Text>
+                    )}
+
+                    {exerciseState.status === 'success' &&
+                      availableExercises.length === 0 && (
+                        <Text c="dimmed">
+                          {selectedMuscleGroup
+                            ? 'No available exercises for this muscle group.'
+                            : 'All available exercises have been added to the plan.'}
+                        </Text>
+                    )}
+
+                    {availableExercises.map((exercise) => (
+                      <Paper key={exercise.id} withBorder p="md" radius="md">
+                        <Group justify="space-between">
+                          <Group gap="md" wrap="nowrap">
+                            {exerciseImages[exercise.name] && (
+                              <Image
+                                src={exerciseImages[exercise.name]}
+                                alt={exercise.name}
+                                w={80}
+                                h={70}
+                                radius="md"
+                                fit="cover"
+                                style={{ flexShrink: 0 }}
+                              />
+                            )}
+
+                            <Stack gap={4}>
+                              <Text fw={600}>{exercise.name}</Text>
+                              <Badge color="var(--mantine-color-pink-6)" variant="light">
+                                {exercise.muscleGroup}
+                              </Badge>
+                            </Stack>
+                          </Group>
+
+                          <Button
+                            type="button"
+                            color="var(--mantine-color-pink-6)"
+                            variant="light"
+                            onClick={() => handleAddExercise(exercise)}>
+                            Add
+                          </Button>
+                      </Group>
+                    </Paper>
+                  ))}
+                  </Stack>
+                </Paper>
+            </Stack>
+          
+            {/*Added exercises*/}
+            <Stack gap="md">
+              <Title order={3}>In This Plan</Title>
               <Paper withBorder p="md" radius="md" className="exerciseList">
                 <Stack gap="sm">
-                  {exerciseState.status === 'loading' && (
-                    <Text c="dimmed">Loading exercises...</Text>
+                  {selectedExercises.length === 0 && (
+                    <Text c="dimmed">
+                      No exercises have been added yet.
+                    </Text>
                   )}
 
-                  {exerciseState.status === 'error' && (
-                    <Text c="red">Unable to load exercises. Please try again.</Text>
-                  )}
+                  {selectedExercises.map((selected) => (
+                    <Paper key={selected.exercise.id} withBorder p="md" radius="md">
+                      <Stack gap="sm">
+                        <Group justify="space-between">
+                          <Group gap="md" wrap="nowrap">
+                            {exerciseImages[selected.exercise.name] && (
+                              <Image
+                                src={exerciseImages[selected.exercise.name]}
+                                alt={selected.exercise.name}
+                                w={80}
+                                h={70}
+                                radius="md"
+                                fit="cover"
+                                style={{ flexShrink: 0 }}
+                              />
+                            )}
 
-                  {exerciseState.status === 'success' &&
-                    availableExercises.length === 0 && (
-                      <Text c="dimmed">
-                        {selectedMuscleGroup
-                          ? 'No available exercises for this muscle group.'
-                          : 'All available exercises have been added to the plan.'}
-                      </Text>
-                  )}
+                            <Stack gap={4}>
+                              <Text fw={600} lineClamp={1}>{selected.exercise.name}</Text>
+                              <Badge color="var(--mantine-color-pink-6)" variant="light">
+                                {selected.exercise.muscleGroup}
+                              </Badge>
+                            </Stack>
+                          </Group>
 
-                  {availableExercises.map((exercise) => (
-                    <Paper key={exercise.id} withBorder p="md" radius="md">
-                      <Group justify="space-between">
-                        <Group gap="md" wrap="nowrap">
-                          {exerciseImages[exercise.name] && (
-                            <Image
-                              src={exerciseImages[exercise.name]}
-                              alt={exercise.name}
-                              w={80}
-                              h={70}
-                              radius="md"
-                              fit="cover"
-                              style={{ flexShrink: 0 }}
-                            />
-                          )}
-
-                          <Stack gap={4}>
-                            <Text fw={600}>{exercise.name}</Text>
-                            <Badge color="var(--mantine-color-pink-6)" variant="light">
-                              {exercise.muscleGroup}
-                            </Badge>
-                          </Stack>
+                          <Button
+                            type="button"
+                            color="var(--mantine-color-pink-6)"
+                            variant="outline"
+                            onClick={() => handleRemoveExercise(selected.exercise.id)}>
+                            Remove
+                          </Button>
                         </Group>
 
-                        <Button
-                          color="var(--mantine-color-pink-6)"
-                          variant="light"
-                          onClick={() => handleAddExercise(exercise)}>
-                          Add
-                        </Button>
-                    </Group>
-                  </Paper>
-                ))}
+                        <Divider />
+
+                        <Group gap="sm" wrap="nowrap">
+                          <Group gap={6} wrap="nowrap">
+                            <Text size="sm" fw={500}>Sets</Text>
+                            <NumberInput
+                              min={1}
+                              w={70}
+                              value={selected.targetSets}
+                              onChange={(value) =>
+                                handleUpdateTargets(selected.exercise.id, 'targetSets', value)
+                              }
+                              onBlur={(event) => {
+                                const raw = event.currentTarget.value;
+                                const parsed = raw === '' ? 1 : Math.max(1, Number(raw));
+                                handleUpdateTargets(selected.exercise.id, 'targetSets', parsed);
+                              }}
+                            />
+                          </Group>
+
+                          <Group gap={6} wrap="nowrap">
+                            <Text size="sm" fw={500}>Reps</Text>
+                            <NumberInput
+                              min={1}
+                              w={70}
+                              value={selected.targetReps}
+                              onChange={(value) =>
+                                handleUpdateTargets(selected.exercise.id, 'targetReps', value)
+                              }
+                              onBlur={(event) => {
+                                const raw = event.currentTarget.value;
+                                const parsed = raw === '' ? 1 : Math.max(1, Number(raw));
+                                handleUpdateTargets(selected.exercise.id, 'targetReps', parsed);
+                              }}
+                            />
+                          </Group>
+                        </Group>
+                      </Stack>
+                    </Paper>
+                  ))}
                 </Stack>
               </Paper>
-          </Stack>
-         
-          {/*Added exercises*/}
-          <Stack gap="md">
-            <Title order={3}>In This Plan</Title>
-            <Paper withBorder p="md" radius="md" className="exerciseList">
-              <Stack gap="sm">
-                {selectedExercises.length === 0 && (
-                  <Text c="dimmed">
-                    No exercises added to this workout plan yet.
-                  </Text>
-                )}
-
-                {selectedExercises.map((selected) => (
-                  <Paper key={selected.exercise.id} withBorder p="md" radius="md">
-                    <Stack gap="sm">
-                      <Group justify="space-between">
-                        <Group gap="md" wrap="nowrap">
-                          {exerciseImages[selected.exercise.name] && (
-                            <Image
-                              src={exerciseImages[selected.exercise.name]}
-                              alt={selected.exercise.name}
-                              w={80}
-                              h={70}
-                              radius="md"
-                              fit="cover"
-                              style={{ flexShrink: 0 }}
-                            />
-                          )}
-
-                          <Stack gap={4}>
-                            <Text fw={600} lineClamp={1}>{selected.exercise.name}</Text>
-                            <Badge color="var(--mantine-color-pink-6)" variant="light">
-                              {selected.exercise.muscleGroup}
-                            </Badge>
-                          </Stack>
-                        </Group>
-
-                        <Button
-                          color="var(--mantine-color-pink-6)"
-                          variant="outline"
-                          onClick={() => handleRemoveExercise(selected.exercise.id)}
-                        >
-                          Remove
-                        </Button>
-                      </Group>
-
-                      <Divider />
-
-                      <Group gap="sm" wrap="nowrap">
-                        <Group gap={6} wrap="nowrap">
-                          <Text size="sm" fw={500}>Sets</Text>
-                          <NumberInput
-                            min={1}
-                            w={70}
-                            value={selected.targetSets}
-                            onChange={(value) =>
-                              handleUpdateTargets(selected.exercise.id, 'targetSets', value)
-                            }
-                            onBlur={(event) => {
-                              const raw = event.currentTarget.value;
-                              const parsed = raw === '' ? 1 : Math.max(1, Number(raw));
-                              handleUpdateTargets(selected.exercise.id, 'targetSets', parsed);
-                            }}
-                          />
-                        </Group>
-
-                        <Group gap={6} wrap="nowrap">
-                          <Text size="sm" fw={500}>Reps</Text>
-                          <NumberInput
-                            min={1}
-                            w={70}
-                            value={selected.targetReps}
-                            onChange={(value) =>
-                              handleUpdateTargets(selected.exercise.id, 'targetReps', value)
-                            }
-                            onBlur={(event) => {
-                              const raw = event.currentTarget.value;
-                              const parsed = raw === '' ? 1 : Math.max(1, Number(raw));
-                              handleUpdateTargets(selected.exercise.id, 'targetReps', parsed);
-                            }}
-                          />
-                        </Group>
-                      </Group>
-                    </Stack>
-                  </Paper>
-                ))}
-              </Stack>
-            </Paper>
-          </Stack>
-        </SimpleGrid>
-        <Button color="pink">Save Plan</Button>
-      </Stack>
+            </Stack>
+          </SimpleGrid>
+          {error && <Text c="red">{error}</Text>}
+          <Button type="submit" loading={saving} color="pink">Save Plan</Button>
+        </Stack>    
+      </form>
     </Container>
   );
 }

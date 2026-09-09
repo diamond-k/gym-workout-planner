@@ -15,6 +15,12 @@ export type WorkoutPlanInput = {
   description: string | null;
 };
 
+export type CreateWorkoutPlanRequest = {
+  name: string;
+  description: string | null;
+  exercises: WorkoutPlanExerciseInput[];
+};
+
 export type WorkoutPlanExerciseInput = {
   exerciseId: number;
   targetSets: number;
@@ -31,7 +37,7 @@ export interface Api {
 
   getWorkoutPlans(): Promise<WorkoutPlan[]>;
   getWorkoutPlan(id: number): Promise<WorkoutPlan>;
-  createWorkoutPlan(input: WorkoutPlanInput): Promise<WorkoutPlan>;
+  createWorkoutPlan(input: CreateWorkoutPlanRequest): Promise<WorkoutPlan>;
   updateWorkoutPlan(id: number, input: WorkoutPlanInput): Promise<WorkoutPlan>;
   deleteWorkoutPlan(id: number): Promise<void>;
 
