@@ -3,4 +3,5 @@ export interface WorkoutPlanResponse {
     name: string;
     description: string | null;
     createdAt: string;
+    updatedAt: string;
 }

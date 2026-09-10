@@ -3,12 +3,8 @@ package com.diamond.workoutplanner.workoutplanexercise;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
-import com.diamond.workoutplanner.exception.DuplicateWorkoutPlanExerciseException;
 import com.diamond.workoutplanner.exception.ResourceNotFoundException;
-import com.diamond.workoutplanner.exercise.Exercise;
 import com.diamond.workoutplanner.exercise.ExerciseRepository;
-import com.diamond.workoutplanner.workoutplan.WorkoutPlan;
 import com.diamond.workoutplanner.workoutplan.WorkoutPlanRepository;
 
 /*

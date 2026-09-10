@@ -10,7 +10,7 @@
   box-shadow: var(--mantine-shadow-md);
 }
 
-/* 1 column - repeat colours every 3 cards */
+/* 1 column */
 .workoutPlanCard:nth-child(3n + 1) .workoutPlanCardIcon {
   background: var(--mantine-color-green-light);
   color: var(--mantine-color-green-8);
@@ -38,7 +38,7 @@
   border-color: var(--mantine-color-pink-4);
 }
 
-/* 2 columns - repeat shifted colour pattern every 6 cards */
+/* 2 columns */
 @media (min-width: 48em) and (max-width: 74.99em) {
 
   .workoutPlanCard:nth-child(6n + 1) .workoutPlanCardIcon,
@@ -75,7 +75,7 @@
   }
 }
 
-/* 3 columns - repeat shifted colour pattern every 9 cards */
+/* 3 columns */
 @media (min-width: 75em) {
 
   .workoutPlanCard:nth-child(9n + 1) .workoutPlanCardIcon,

@@ -6,6 +6,7 @@ public record WorkoutPlanResponse(
         int id,
         String name,
         String description,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
 }

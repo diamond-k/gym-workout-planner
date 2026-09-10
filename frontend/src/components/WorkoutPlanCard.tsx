@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { Paper, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconBarbell } from "@tabler/icons-react";
 import type { WorkoutPlanResponse } from "../types/WorkoutPlanResponse";
+import {formatRelativeTime} from '../utils/formatRelativeTime';
 import "../styles/WorkoutPlanCard.css";
 
 interface WorkoutPlanCardProps {
@@ -46,6 +47,12 @@ function WorkoutPlanCard({workoutPlan, exerciseCount}: WorkoutPlanCardProps) {
             : exerciseCount === 1
               ? "1 exercise"
               : `${exerciseCount} exercises`}
+        </Text>
+        <Text size="xs" c="dimmed">
+            {workoutPlan.createdAt === workoutPlan.updatedAt
+              ? `Created ${formatRelativeTime(workoutPlan.createdAt)}`
+              : `Edited ${formatRelativeTime(workoutPlan.updatedAt)}`            
+            }
         </Text>
       </Stack>
     </Paper>

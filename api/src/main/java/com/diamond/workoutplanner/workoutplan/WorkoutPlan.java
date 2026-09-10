@@ -37,6 +37,9 @@ public class WorkoutPlan {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
     @OneToMany(
         mappedBy = "workoutPlan",
         cascade = CascadeType.ALL,
@@ -77,8 +80,18 @@ public class WorkoutPlan {
     }
 
     @PrePersist
-    public void setCreatedAt() {
-        this.createdAt = LocalDateTime.now();
+    public void setTimestamps() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
     
     public List<WorkoutPlanExercise> getExercises() {

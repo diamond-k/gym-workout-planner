@@ -28,7 +28,7 @@ public class WorkoutPlanService {
     }
 
     public List<WorkoutPlan> getAllWorkoutPlans() {
-        return workoutPlanRepository.findAllByOrderByCreatedAtDesc();
+        return workoutPlanRepository.findAllByOrderByUpdatedAtDesc();
     }
 
     public WorkoutPlan getWorkoutPlanById(int id) {
@@ -145,6 +145,8 @@ public class WorkoutPlanService {
                                 workoutPlanExercise.getExercise().getId()
                         )
         );
+
+        workoutPlan.setUpdatedAt();
 
         return workoutPlanRepository.save(workoutPlan);
     }

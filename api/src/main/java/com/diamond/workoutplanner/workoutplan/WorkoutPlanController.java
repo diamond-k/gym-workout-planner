@@ -70,7 +70,8 @@ public class WorkoutPlanController {
                 workoutPlan.getId(),
                 workoutPlan.getName(),
                 workoutPlan.getDescription(),
-                workoutPlan.getCreatedAt()
+                workoutPlan.getCreatedAt(),
+                workoutPlan.getUpdatedAt()
         );
     }
 }
