@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useBlocker } from "react-router";
 import {
   Button,
   Container,
@@ -63,7 +63,6 @@ function CreateEditWorkoutPlan() {
     status: "loading",
   });
 
-  const [backConfirmModalOpen, setBackConfirmModalOpen] = useState(false);
   const [originalData, setOriginalData] = useState<{
     name: string;
     description: string;
@@ -87,6 +86,15 @@ function CreateEditWorkoutPlan() {
   : name.trim() !== "" || description.trim() !== "" || selectedExercises.length > 0;
 
   const [saving, setSaving] = useState(false);
+
+  // block navigation when there are unsaved changes,
+  // except while the form is being saved
+  const blocker = useBlocker(({ currentLocation, nextLocation }) =>
+      hasUnsavedChanges &&
+      !saving &&
+      currentLocation.pathname !== nextLocation.pathname
+  );
+
   const [error, setError] = useState("");
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
@@ -185,11 +193,7 @@ function CreateEditWorkoutPlan() {
       : [];
 
   function handleBackClick() {
-    if (hasUnsavedChanges) {
-      setBackConfirmModalOpen(true);
-    } else {
-      navigate(isEditMode ? `/workout-plans/${id}` : "/");
-    }
+    navigate(isEditMode ? `/workout-plans/${id}` : "/");
   }
 
   // add the clicked exercise to selectedExercises
@@ -315,28 +319,30 @@ function CreateEditWorkoutPlan() {
       setSaving(false);
     }
   }
+
   return (
     <>
-    <Modal
-      opened={backConfirmModalOpen}
-      onClose={() => setBackConfirmModalOpen(false)}
-      title={<Text fw={700}>Discard changes?</Text>}
-      centered
-    >
+      <Modal
+        opened={blocker.state === "blocked"}
+        onClose={() => blocker.reset?.()}
+        title={<Text fw={700}>Discard changes?</Text>}
+        centered>
+
       <Stack>
         <Text>
           You have unsaved changes. Are you sure you want to leave? This action cannot be undone.
         </Text>
 
         <Group justify="flex-end">
-          <Button variant="default" onClick={() => setBackConfirmModalOpen(false)}>
+          <Button
+            variant="default"
+            onClick={() => blocker.reset?.()}>
             Cancel
           </Button>
 
           <Button
             color="pink"
-            onClick={() => navigate(isEditMode ? `/workout-plans/${id}` : "/")}
-          >
+            onClick={() => blocker.proceed?.()}>
             Discard
           </Button>
         </Group>
@@ -350,8 +356,7 @@ function CreateEditWorkoutPlan() {
             type="button"
             onClick={handleBackClick}
             className="backLink"
-            underline="never"
-          >
+            underline="never">
             <IconArrowLeft size={18} />
             {isEditMode ? "Back to workout" : "Back to workouts"}
           </Anchor>
@@ -478,8 +483,7 @@ function CreateEditWorkoutPlan() {
             type="submit"
             className="savePlanButton"
             loading={saving}
-            color="pink"
-          >
+            color="pink">
             Save
           </Button>
         </Stack>
