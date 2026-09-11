@@ -40,7 +40,7 @@ function PlanDetails() {
       navigate("/");
     } catch (error) {
       console.error(error);
-      window.alert("Unable to delete workout plan. Please try again.");
+      window.alert("Unable to delete workout. Please try again.");
     }
   }
 
@@ -118,18 +118,18 @@ function PlanDetails() {
       return (
         <Stack gap="sm">        
           {exerciseState.data.map((workoutPlanExercise) => (
-            <Paper
-              key={workoutPlanExercise.id}
-              withBorder
-              p="md"
-              radius="md"
-              onClick={() =>
-                navigate(
-                  `/workout-plans/${id}/exercises/${workoutPlanExercise.id}`,
-                )
-              }
-              style={{ cursor: "pointer" }}>
-
+           <Paper
+            key={workoutPlanExercise.id}
+            withBorder
+            shadow="sm"
+            p="md"
+            radius="md"
+            className="workoutExerciseCard"
+            onClick={() =>
+              navigate(
+                `/workout-plans/${id}/exercises/${workoutPlanExercise.id}`,
+              )
+            }>
               <Group gap="md" wrap="nowrap">
                 {exerciseImages[workoutPlanExercise.exerciseName] && (
                   <Image
@@ -246,7 +246,7 @@ function PlanDetails() {
                 color="pink"
                 size="lg"
                 className="planActionMobile"
-                aria-label="Edit plan"
+                aria-label="Edit workout"
                 onClick={handleEditPlan}>
                 <IconPencil size={18} />
               </ActionIcon>
@@ -255,7 +255,7 @@ function PlanDetails() {
                 color="pink"
                 size="lg"
                 className="planActionMobile"
-                aria-label="Delete plan"
+                aria-label="Delete workout"
                 onClick={() => setDeleteModalOpen(true)}>
                 <IconTrash size={18} />
               </ActionIcon>
