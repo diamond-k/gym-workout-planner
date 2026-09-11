@@ -1,9 +1,11 @@
 import { createBrowserRouter } from 'react-router';
 import App from './App';
-import Dashboard from './pages/Dashboard';
-import CreateEditWorkoutPlan from './pages/CreateEditWorkoutPlan';
-import PlanDetails from './pages/PlanDetails';
-import ExerciseDetails from './pages/ExerciseDetails';
+import {
+  Dashboard,
+  CreateEditWorkoutPlan,
+  PlanDetails,
+  ExerciseDetails,
+} from './LazyPages';
 
 export const router = createBrowserRouter([
   {
