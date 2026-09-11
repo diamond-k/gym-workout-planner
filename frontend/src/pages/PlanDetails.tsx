@@ -7,7 +7,6 @@ import {
   Stack,
   Text,
   Title,
-  Image,
   Group,
   Anchor,
   Modal,
@@ -18,7 +17,7 @@ import { api } from "../services/api";
 import type { WorkoutPlanResponse } from "../types/WorkoutPlanResponse";
 import type { WorkoutPlanExerciseResponse } from "../types/WorkoutPlanExerciseResponse";
 import type { RequestState } from '../types/RequestState';
-import { exerciseImages } from "../data/exerciseImages";
+import ExerciseImage from '../components/ExerciseImage';
 import "../styles/Navigation.css";
 import "../styles/PlanDetails.css";
 
@@ -131,17 +130,7 @@ function PlanDetails() {
               )
             }>
               <Group gap="md" wrap="nowrap">
-                {exerciseImages[workoutPlanExercise.exerciseName] && (
-                  <Image
-                    src={exerciseImages[workoutPlanExercise.exerciseName]}
-                    alt={workoutPlanExercise.exerciseName}
-                    w={100}
-                    h={80}
-                    radius="md"
-                    fit="cover"
-                    style={{ flexShrink: 0 }}
-                  />
-                )}
+                <ExerciseImage exerciseName={workoutPlanExercise.exerciseName} />
 
                 <Stack gap={2}>
                   <Text fw={600}>{workoutPlanExercise.exerciseName}</Text>

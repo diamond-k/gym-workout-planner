@@ -96,11 +96,7 @@ function ExerciseDetails() {
               src={imageSrc}
               alt={state.data.exerciseName}
               radius="md"
-              className={`exerciseDetailImage ${
-                state.data.exerciseName === "Tricep Pushdown"
-                  ? "tricepPushdownImage"
-                  : ""
-              }`}
+              className="exerciseDetailImage"
             />
           )}
           <Stack gap="xs">

@@ -3,15 +3,14 @@ import {
   Button,
   Divider,
   Group,
-  Image,
   NumberInput,
   Paper,
   Stack,
   Text,
 } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
-import { exerciseImages } from "../data/exerciseImages";
 import type { Exercise } from "../types/Exercise";
+import ExerciseImage from "../components/ExerciseImage";
 
 // discriminated union: variant "available" requires onAdd
 // variant "selected" requires onRemove/onUpdateTargets/targetSets/targetReps
@@ -52,17 +51,9 @@ function ExerciseCard(props: ExerciseCardProps) {
           className="exerciseIdentity"
           style={{ minWidth: 0 }}
         >
-          {exerciseImages[exercise.name] && (
-            <Image
-              src={exerciseImages[exercise.name]}
-              alt={exercise.name}
-              w={80}
-              h={70}
-              radius="md"
-              fit="cover"
-              style={{ flexShrink: 0 }}
-            />
-          )}
+  
+          <ExerciseImage exerciseName={exercise.name} />
+
 
           <Stack gap={4} style={{ minWidth: 0 }}>
             <Text fw={600}>{exercise.name}</Text>
