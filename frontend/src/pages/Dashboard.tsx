@@ -27,7 +27,7 @@ function Dashboard() {
   const [exerciseCounts, setExerciseCounts] = useState<Record<number, number>>({});
   const navigate = useNavigate();
 
-  // Load workout plans when the Dashboard first appears
+  // Load workouts when the Dashboard first appears
   useEffect(() => {
     api
       .getWorkoutPlans()
@@ -47,39 +47,39 @@ function Dashboard() {
       });
   }, []);
 
-  // Function renders loading, error, no workout plan card, or workout plan cards
-  function renderWorkoutPlans() {
+  // Function renders loading, error, no workout card, or workout cards
+  function renderWorkouts() {
     if (state.status === "loading") {
-      return <Text c="dimmed">Loading workout plans...</Text>;
+      return <Text c="dimmed">Loading workouts...</Text>;
     }
 
     if (state.status === "error") {
-      return <Text c="red">Unable to load workout plans. Please try again.</Text>;
+      return <Text c="red">Unable to load workouts. Please try again.</Text>;
     }
 
     if (state.status === "success") {
-      // no workout plan yet
+      // no workouts yet
       if (state.data.length === 0) {
         return (
           <Paper withBorder shadow="md" p="xl" radius="md">
-            <Stack align="center" gap="sm">
+            <Stack align="center" gap="md">
               
               <ThemeIcon size={64} radius="xl" variant="light" color="pink">
                 <IconBarbell size={30} color="var(--mantine-color-pink-6)" />
               </ThemeIcon>
 
               <Text fw={700} size="lg">
-                No workout plans yet
+                No workouts added yet
               </Text>
 
               <Text c="dimmed" ta="center">
-                Create your first workout plan to get started
+                Create your first workout to get started
               </Text>
 
               <Button
                 color="pink"
                 onClick={() => navigate("/workout-plans/new")}>
-                Create Plan
+                Create
               </Button>
 
             </Stack>
@@ -105,31 +105,31 @@ function Dashboard() {
     <Container size="lg" py="xl">
       <Stack gap="xl">
         <Group justify="space-between">
-           <Text c="gray.7" size="lg">
-          Build your next workout
-        </Text>
-          {state.status === "success" && state.data.length > 0 ? (
-            <>
-              <Button
-                color="pink"
-                className="createPlanDesktop"
-                onClick={() => navigate("/workout-plans/new")}>
-                Create Plan
-              </Button>
-              
-              <ActionIcon
-                color="pink"
-                size="lg"
-                className="createPlanMobile"
-                aria-label="Create plan"
-                onClick={() => navigate("/workout-plans/new")}>
-                <IconPlus size={20} />
-              </ActionIcon>
+            <Text c="gray.7" size="lg">
+              Build your next workout
+            </Text>
+            {state.status === "success" && state.data.length > 0 ? (
+              <>
+                <Button
+                  color="pink"
+                  className="createPlanDesktop"
+                  onClick={() => navigate("/workout-plans/new")}>
+                  Create
+                </Button>
+                
+                <ActionIcon
+                  color="pink"
+                  size="lg"
+                  className="createPlanMobile"
+                  aria-label="Create workout"
+                  onClick={() => navigate("/workout-plans/new")}>
+                  <IconPlus size={20} />
+                </ActionIcon>
             </>
           ) : null}
         </Group>
-        <Title order={2}>My Workout Plans</Title>
-        {renderWorkoutPlans()}
+        <Title order={2}>My Workouts</Title>
+        {renderWorkouts()}
       </Stack>
     </Container>
   );

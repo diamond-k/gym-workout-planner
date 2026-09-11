@@ -11,7 +11,12 @@ import {
   Textarea,
   TextInput,
   Title,
+  Anchor,
+  Group,
+  Modal
 } from "@mantine/core";
+
+import { IconArrowLeft } from "@tabler/icons-react";
 import { api } from "../services/api";
 import type { Exercise } from "../types/Exercise";
 import type { MuscleGroup } from "../types/MuscleGroup";
@@ -52,17 +57,18 @@ const muscleGroups: MuscleGroup[] = [
 function CreateEditWorkoutPlan() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedMuscleGroup, setSelectedMuscleGroup] =
-    useState<MuscleGroup | null>(null);
-  const [selectedExercises, setSelectedExercises] = useState<
-    SelectedExercise[]
-  >([]);
+  const [selectedMuscleGroup, setSelectedMuscleGroup] = useState<MuscleGroup | null>(null);
+  const [selectedExercises, setSelectedExercises] = useState<SelectedExercise[]>([]);
   const [exerciseState, setExerciseState] = useState<RequestState<Exercise[]>>({
     status: "loading",
   });
 
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
+  const [backConfirmModalOpen, setBackConfirmModalOpen] = useState(false);
+  const [originalData, setOriginalData] = useState<{
+    name: string;
+    description: string;
+    exercises: SelectedExercise[];
+  } | null>(null);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -73,6 +79,15 @@ function CreateEditWorkoutPlan() {
     isEditMode ? { status: "loading" } : { status: "idle" },
   );
 
+  const hasUnsavedChanges = isEditMode
+  ? originalData !== null &&
+    (name !== originalData.name ||
+      description !== originalData.description ||
+      JSON.stringify(selectedExercises) !== JSON.stringify(originalData.exercises))
+  : name.trim() !== "" || description.trim() !== "" || selectedExercises.length > 0;
+
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
   // load the exercise catalogue for both create and edit
@@ -94,7 +109,7 @@ function CreateEditWorkoutPlan() {
       });
   }, []);
 
-  // when editing, load the existing workout plan and its saved exercises
+  // when editing, load the existing workout and its saved exercises
   useEffect(() => {
     if (!isEditMode || id === undefined) {
       return;
@@ -123,6 +138,10 @@ function CreateEditWorkoutPlan() {
 
         setSelectedExercises(selected);
 
+        setOriginalData({ 
+          name: workoutPlan.name, 
+          description: workoutPlan.description ?? "", exercises: selected });
+        
         setEditState({
           status: "success",
           data: {
@@ -164,6 +183,14 @@ function CreateEditWorkoutPlan() {
           })
           .sort((a, b) => a.name.localeCompare(b.name))
       : [];
+
+  function handleBackClick() {
+    if (hasUnsavedChanges) {
+      setBackConfirmModalOpen(true);
+    } else {
+      navigate(isEditMode ? `/workout-plans/${id}` : "/");
+    }
+  }
 
   // add the clicked exercise to selectedExercises
   function handleAddExercise(exercise: Exercise) {
@@ -283,25 +310,62 @@ function CreateEditWorkoutPlan() {
       }
     } catch (error) {
       // if the POST fails, show user a readable error message.
-      setError(`Unable to save workout plan: ${(error as Error).message}`);
+      setError(`Unable to save workout: ${(error as Error).message}`);
     } finally {
       setSaving(false);
     }
   }
   return (
+    <>
+    <Modal
+      opened={backConfirmModalOpen}
+      onClose={() => setBackConfirmModalOpen(false)}
+      title={<Text fw={700}>Discard changes?</Text>}
+      centered
+    >
+      <Stack>
+        <Text>
+          You have unsaved changes. Are you sure you want to leave? This action cannot be undone.
+        </Text>
+
+        <Group justify="flex-end">
+          <Button variant="default" onClick={() => setBackConfirmModalOpen(false)}>
+            Cancel
+          </Button>
+
+          <Button
+            color="pink"
+            onClick={() => navigate(isEditMode ? `/workout-plans/${id}` : "/")}
+          >
+            Discard
+          </Button>
+        </Group>
+      </Stack>
+    </Modal>
     <Container size="lg" py="xl">
       <form onSubmit={handleSubmit}>
         <Stack gap="xl">
+          <Anchor
+            component="button"
+            type="button"
+            onClick={handleBackClick}
+            className="backLink"
+            underline="never"
+          >
+            <IconArrowLeft size={18} />
+            {isEditMode ? "Back to workout" : "Back to workouts"}
+          </Anchor>
+
           <Title order={2}>
-            {isEditMode ? "Edit Workout Plan" : "Create Workout Plan"}
+            {isEditMode ? "Edit Workout" : "Create Workout"}
           </Title>
 
           {isEditMode && editState.status === "loading" && (
-            <Text c="dimmed">Loading workout plan...</Text>
+            <Text c="dimmed">Loading workout...</Text>
           )}
 
           {isEditMode && editState.status === "error" && (
-            <Text c="red">Unable to load workout plan. Please try again.</Text>
+            <Text c="red">Unable to load workout. Please try again.</Text>
           )}
 
           <TextInput
@@ -366,7 +430,7 @@ function CreateEditWorkoutPlan() {
                       <Text c="dimmed">
                         {selectedMuscleGroup
                           ? "No available exercises for this muscle group."
-                          : "All available exercises have been added to the plan."}
+                          : "All available exercises have been added to the workout."}
                       </Text>
                     )}
 
@@ -384,7 +448,7 @@ function CreateEditWorkoutPlan() {
 
             {/*Added exercises*/}
             <Stack gap="md">
-              <Title order={3}>In This Plan</Title>
+              <Title order={3}>In This Workout</Title>
               <Paper withBorder p="md" radius="md" className="exerciseList">
                 <Stack gap="sm">
                   {selectedExercises.length === 0 && (
@@ -416,11 +480,12 @@ function CreateEditWorkoutPlan() {
             loading={saving}
             color="pink"
           >
-            Save Plan
+            Save
           </Button>
         </Stack>
       </form>
     </Container>
+    </>
   );
 }
 

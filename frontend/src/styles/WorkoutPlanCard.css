@@ -7,7 +7,7 @@
 
 .workoutPlanCard:hover {
   transform: translateY(-2px);
-  box-shadow: var(--mantine-shadow-md);
+  box-shadow: var(--mantine-shadow-lg);
 }
 
 /* 1 column */

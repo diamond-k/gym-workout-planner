@@ -88,7 +88,7 @@ function ExerciseDetails() {
             underline="never"
           >
             <IconArrowLeft size={18} />
-            Back to workout plan
+            Back to workout
           </Anchor>
 
           {imageSrc && (

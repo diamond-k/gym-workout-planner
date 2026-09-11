@@ -53,7 +53,7 @@ function PlanDetails() {
   });
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  // Load the selected workout plan
+  // Load the selected workout
   useEffect(() => {
     if (!id) {
       return;
@@ -75,7 +75,7 @@ function PlanDetails() {
       });
   }, [id]);
 
-  // Load exercises belonging to the selected workout plan
+  // Load exercises belonging to the selected workout
   useEffect(() => {
     if (!id) {
       return;
@@ -101,7 +101,7 @@ function PlanDetails() {
 
   // Render the exercise section
   // TODO: Mobile only - show the first 4 exercises, then allow Show more / Show less.
-  function renderWorkoutPlanExercises() {
+  function renderWorkoutExercises() {
     if (exerciseState.status === "loading") {
       return <Text c="dimmed">Loading exercises...</Text>;
     }
@@ -112,7 +112,7 @@ function PlanDetails() {
 
     if (exerciseState.status === "success") {
       if (exerciseState.data.length === 0) {
-        return <Text c="dimmed">No exercises in this plan yet.</Text>;
+        return <Text c="dimmed">No exercises in this workout yet.</Text>;
       }
 
       return (
@@ -167,7 +167,7 @@ function PlanDetails() {
   if (state.status === "loading") {
     return (
       <Container size="lg" py="xl">
-        <Text c="dimmed">Loading workout plan...</Text>
+        <Text c="dimmed">Loading workout...</Text>
       </Container>
     );
   }
@@ -175,7 +175,7 @@ function PlanDetails() {
   if (state.status === "error") {
     return (
       <Container size="lg" py="xl">
-        <Text c="red">Unable to load workout plan. Please try again.</Text>
+        <Text c="red">Unable to load workout. Please try again.</Text>
       </Container>
     );
   }
@@ -186,7 +186,7 @@ function PlanDetails() {
       <Modal
         opened={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        title={<Text fw={700}>Delete workout plan?</Text>}
+        title={<Text fw={700}>Delete workout?</Text>}
         centered>
         <Stack>
           <Text>
@@ -218,7 +218,7 @@ function PlanDetails() {
             className="backLink"
             underline="never">
             <IconArrowLeft size={18} />
-            Back to workout plans
+            Back to workouts
           </Anchor>
 
           <Group justify="space-between" align="flex-start" wrap="nowrap" className="planHeader">           
@@ -230,14 +230,14 @@ function PlanDetails() {
                 color="pink"
                 className="planActionDesktop"
                 onClick={handleEditPlan}>
-                Edit Plan
+                Edit
               </Button>
 
               <Button
                 color="pink"
                 className="planActionDesktop"
                 onClick={() => setDeleteModalOpen(true)}>
-                Delete Plan
+                Delete
               </Button>
 
               {/* Mobile */}
@@ -263,11 +263,11 @@ function PlanDetails() {
           </Group>
           
           {state.data.description && (
-            <Text c="dimmed">{state.data.description}</Text> //TODO: Mobile only - add Show more / Show less for long plan descriptions.
+            <Text c="dimmed">{state.data.description}</Text> //TODO: Mobile only - add Show more / Show less for long workout descriptions.
           )}
          
           <Title order={3}>Exercises</Title>
-          {renderWorkoutPlanExercises()}
+          {renderWorkoutExercises()}
         </Stack>
       </Container>
       </>
