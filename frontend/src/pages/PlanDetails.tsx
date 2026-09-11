@@ -18,7 +18,6 @@ import type { WorkoutPlanResponse } from "../types/WorkoutPlanResponse";
 import type { WorkoutPlanExerciseResponse } from "../types/WorkoutPlanExerciseResponse";
 import type { RequestState } from '../types/RequestState';
 import ExerciseImage from '../components/ExerciseImage';
-import "../styles/Navigation.css";
 import "../styles/PlanDetails.css";
 
 function PlanDetails() {

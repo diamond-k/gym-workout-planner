@@ -12,6 +12,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.validation.constraints.Pattern;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToMany;
@@ -26,11 +27,12 @@ public class WorkoutPlan {
     private Integer id;
 
     @NotBlank(message = "Name is required")
-    @Size(max = 255, message = "Workout plan name must be 255 characters or less")
+    @Size(max = 255, message = "Name must be 255 characters or less")
+    @Pattern(regexp = ".*[\\p{L}\\p{N}].*", message = "Name must contain at least one letter or number")
     @Column(nullable = false)
     private String name;
 
-    @Size(max = 1000, message = "Workout plan description must be 1000 characters or less")
+    @Size(max = 1000, message = "Description must be 1000 characters or less")
     @Column(length = 1000)
     private String description;
 

@@ -27,12 +27,35 @@ export interface Api {
   getWorkoutPlanExercises(workoutPlanId: number): Promise<WorkoutPlanExerciseResponse[]>;
 }
 
-function ensureOk(response: Response, doing: string): void {
-  if (!response.ok) {
-    throw new Error(
-      `Failed to ${doing}: ${response.status} ${response.statusText}`,
-    );
+async function ensureOk(response: Response, doing: string): Promise<void> {
+  if (response.ok) {
+    return;
   }
+
+  const contentType = response.headers.get('content-type');
+
+  if (contentType?.includes('application/json')) {
+    const body = await response.json();
+
+    if (body && typeof body === 'object') {
+      const messages = Object.values(body)
+        .filter((value) => typeof value === 'string');
+
+      if (messages.length > 0) {
+        throw new Error(messages.join(' '));
+      }
+    }
+  }
+
+  const message = await response.text();
+
+  if (message) {
+    throw new Error(message);
+  }
+
+  throw new Error(
+    `Failed to ${doing}: ${response.status} ${response.statusText}`,
+  );
 }
 
 export const api: Api = {
@@ -44,7 +67,7 @@ export const api: Api = {
       : '/api/exercises';
 
     const response = await fetch(url);
-    ensureOk(response, "get exercises");
+    await ensureOk(response, "get exercises");
     return (await response.json()) as Exercise[];
   },
   // #endregion
@@ -52,13 +75,13 @@ export const api: Api = {
   // #region Workout Plans
   async getWorkoutPlans() {
     const response = await fetch('/api/workout-plans');
-    ensureOk(response, "get workout plans");
+    await ensureOk(response, "get workout plans");
     return (await response.json()) as WorkoutPlanResponse[];
   },
 
   async getWorkoutPlan(id) {
     const response = await fetch(`/api/workout-plans/${id}`);
-    ensureOk(response, `get workout plan ${id}`);
+    await ensureOk(response, `get workout plan ${id}`);
     return (await response.json()) as WorkoutPlanResponse;
   },
 
@@ -70,7 +93,7 @@ export const api: Api = {
       },
       body: JSON.stringify(input)
     });
-    ensureOk(response, 'create workout plan');
+    await ensureOk(response, 'create workout plan');
     return (await response.json()) as WorkoutPlanResponse;
   },
 
@@ -82,7 +105,7 @@ export const api: Api = {
       },
       body: JSON.stringify(input)
     });
-    ensureOk(response, `update workout plan ${id}`);
+    await ensureOk(response, `update workout plan ${id}`);
     return (await response.json()) as WorkoutPlanResponse;
   },
 
@@ -90,7 +113,7 @@ export const api: Api = {
     const response = await fetch(`/api/workout-plans/${id}`, {
       method: 'DELETE',
     });
-    ensureOk(response, `delete workout plan ${id}`);
+    await ensureOk(response, `delete workout plan ${id}`);
   },
   // #endregion
 
@@ -99,7 +122,7 @@ export const api: Api = {
     const response = await fetch(
       `/api/workout-plans/${workoutPlanId}/workout-plan-exercises`
     );
-    ensureOk(response, `get workout plan exercises for plan ${workoutPlanId}`);
+    await ensureOk(response, `get workout plan exercises for plan ${workoutPlanId}`);
     return (await response.json()) as WorkoutPlanExerciseResponse[];
   }
   // #endregion 

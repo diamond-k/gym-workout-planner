@@ -15,7 +15,6 @@ import {
   Group,
   Modal
 } from "@mantine/core";
-
 import { IconArrowLeft } from "@tabler/icons-react";
 import { api } from "../services/api";
 import type { Exercise } from "../types/Exercise";
@@ -40,6 +39,7 @@ type EditLoadData = {
 
 interface FormErrors {
   name?: string;
+  description?: string;
   exercises?: string;
 }
 
@@ -249,16 +249,43 @@ function CreateEditWorkoutPlan() {
     );
   }
 
+  function handleFormKeyDown(event: React.KeyboardEvent<HTMLFormElement>) {
+    const target = event.target;
+
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    const isSubmitButton =
+      target instanceof HTMLButtonElement && target.type === "submit";
+
+    const isTextarea = target instanceof HTMLTextAreaElement;
+
+    if (event.key === "Enter" && !isSubmitButton && !isTextarea) {
+      event.preventDefault();
+    }
+  }
+
   function validate(
-    planName: string,
+    workoutName: string,
+    workoutDescription: string,
     exercises: SelectedExercise[],
   ): FormErrors {
     // create an empty object to store any validation errors
     const errors: FormErrors = {};
 
-    // if name is empty after removing spaces, add a name error
-    if (planName.trim() === "") {
+    // if name is empty, contains only special characters 
+    // or is > 255, add a name error
+    if (workoutName.trim() === "") {
       errors.name = "Name is required.";
+    } else if (workoutName.trim().length > 255) {
+      errors.name = "Name must be 255 characters or less.";
+    } else if (!/[\p{L}\p{N}]/u.test(workoutName)) {
+      errors.name = "Name must contain at least one letter or number.";
+    }
+
+    if (workoutDescription.trim().length > 1000) {
+      errors.description = "Description must be 1000 characters or less.";
     }
 
     // if selected exercises list is empty, add a exercise error
@@ -276,7 +303,7 @@ function CreateEditWorkoutPlan() {
 
     // pass the current name state into validate()
     // validate() returns either {} or an object containing validation errors
-    const nextErrors = validate(name, selectedExercises);
+    const nextErrors = validate(name, description, selectedExercises);
 
     // store returned validation errors in React state
     // so they can be displayed in the form
@@ -349,7 +376,7 @@ function CreateEditWorkoutPlan() {
       </Stack>
     </Modal>
     <Container size="lg" py="xl">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onKeyDown={handleFormKeyDown}>
         <Stack gap="xl">
           <Anchor
             component="button"
@@ -399,8 +426,20 @@ function CreateEditWorkoutPlan() {
             label="Description"
             placeholder="Add an optional description"
             value={description}
-            onChange={(event) => setDescription(event.currentTarget.value)}
-            minRows={3}
+            onChange={(event) => {
+            setDescription(event.currentTarget.value);
+            setFormErrors((errors) => ({
+              ...errors,
+              description: undefined,
+              }));
+            }}
+            styles={{
+              error: {
+                fontSize: "15px",
+              },
+            }}
+            rows={4}
+            error={formErrors.description}
           />
           <Select
             label="Filter by muscle group"
