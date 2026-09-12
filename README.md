@@ -304,20 +304,6 @@ The `-v` option removes the `db-data` volume, so the next startup uses a fresh d
 
 ---
 
-## Backend Architecture
-
-The Spring Boot API follows a layered structure:
-
-- **Controllers** handle HTTP requests and return API responses.
-- **Services** contain the application and business logic.
-- **Repositories** use Spring Data JPA to access and persist data in MySQL.
-- **Entities** represent the database tables and relationships.
-- **DTOs** define the request and response data used by the API.
-
-Spring Data JPA is used to map the Java entities to the MySQL database and manage relationships between workouts, exercises, and workout exercises.
-
----
-
 ## Database
 
 The application uses three main tables.
