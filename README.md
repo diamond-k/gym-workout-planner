@@ -590,3 +590,38 @@ docker compose exec db mysql -uworkout_user -p workout_planner
 ```
 
 Enter the password from your .env file when prompted.
+
+### Restart the Docker API
+
+From the project root:
+
+```bash
+docker compose restart api
+```
+
+This restarts only the API container without resetting the database or restarting the rest of the stack.
+
+## Troubleshooting
+
+### Port already in use
+
+If Docker reports that port `8080` or `5173` is already in use, another local process is already using that port.
+
+Stop any locally running Spring Boot API or Vite frontend before starting the Docker stack:
+
+```bash
+docker compose up --build
+```
+
+This ensures the containers use the latest frontend and backend code.
+
+Resetting the Docker database
+
+To completely reset the Docker database and recreate it from the current schema and seed data:
+
+```bash
+docker compose down -v
+docker compose up --build
+```
+
+The -v option deletes the existing MySQL volume, including any workouts created in that Docker database. Use this only when a fresh database is needed.
