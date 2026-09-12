@@ -1,81 +1,188 @@
-# Full-Stack Starter
+# Workout Planner
 
-A minimal but complete starter repo for the Full Stack Software Development assessment. It contains a React (Vite / TypeScript) frontend calling a Spring Boot REST API, which reads from a MySQL database. It exists to give you a known-good foundation to build your own application on.
+A web application for creating and managing workouts.
 
-To get started, you can run the application directly on your own machine. Containerising the stack is part of the assessment, so writing a Dockerfile for the API, another for the frontend, and the Compose file that runs them together is your task.
+Users can build workouts from an exercise list, filter exercises by muscle group, set target sets and reps, edit existing workouts, and view exercise instructions and images.
 
-**The assessment brief lives in [ASSESSMENT.md](ASSESSMENT.md).** Read it before you start building.
+The application uses a React and TypeScript frontend, a Spring Boot REST API, and a MySQL database. Docker Compose is used to run the frontend, API, and database together.
 
 ---
+
+## Features
+
+- View saved workouts from the dashboard
+- Create a workout from an exercise list
+- Filter exercises by muscle group
+- Set target sets and reps for each exercise
+- Edit workout names, descriptions, exercises, sets, and reps
+- Remove exercises from a workout
+- View exercise images and instructions
+- Delete workouts
+- Show the most recently created or edited workouts first
+- Warn before leaving the create/edit page with unsaved changes
+- Validate workout data on both the frontend and backend
+- Responsive layout for desktop and mobile
+- Persist workout data in MySQL
+- Run the frontend, API, and database together with Docker Compose
+
+---
+
+## Tech Stack
+
+### Frontend
+
+- React 19
+- TypeScript
+- Vite
+- Mantine
+- React Router
+- Tabler Icons
+
+### Backend
+
+- Java 21
+- Spring Boot
+- Spring Data JPA
+- Jakarta Validation
+- Maven
+
+### Database
+
+- MySQL 8
+
+### Containerisation
+
+- Docker
+- Docker Compose
+
+---
+
+## Frontend Architecture
+
+The frontend is split into pages, reusable components, API services, TypeScript types, and styling.
+
+- **Pages** represent the main screens of the application, including the dashboard, create/edit workout form, workout details, and exercise details.
+- **Reusable components** are used for shared interface elements such as workout cards, exercise cards, exercise images, and the navigation bar.
+- **React Router** handles navigation between pages. The main page routes are lazy loaded so they are only loaded when needed.
+- **React hooks** such as `useState` and `useEffect` manage component state and load data from the API.
+- A shared `RequestState` type is used to represent loading, success, and error states when data is requested.
+- The `api.ts` service keeps API requests separate from the page components and provides the frontend with methods for creating, retrieving, updating, and deleting workouts.
+- TypeScript types define the data exchanged between the frontend and backend.
+- The workout form loads the exercise list once and applies the muscle group filter on the client side.
+- Mantine components are used alongside custom CSS for the interface, with responsive layouts and controls for smaller screen sizes.
+
+## Backend Architecture
+
+The Spring Boot API follows a layered structure:
+
+- **Controllers** receive HTTP requests and return API responses.
+- **Services** contain the application and business logic.
+- **Repositories** provide access to the MySQL database using Spring Data JPA.
+- **Entities** represent the database tables and their relationships.
+- **DTOs** define the request and response data used by the API.
+
+Spring Data JPA maps the Java entities to the MySQL tables and manages the relationships between workouts, exercises, and workout exercises.
+
+The repositories also use **derived query methods**, allowing Spring Data JPA to create queries from method names rather than requiring each query to be written manually. Examples used in the application include:
+
+- `findByMuscleGroup()` to retrieve exercises belonging to a particular muscle group.
+- `findAllByOrderByUpdatedAtDesc()` to return workouts with the most recently created or edited first.
+- `findByWorkoutPlanIdOrderByPositionAsc()` to retrieve the exercises belonging to a workout in their saved order.
 
 ## Project Structure
 
 ```text
-fsd-project/
-├── api/                            # Spring Boot (Java 21) backend
+gym-workout-planner/
+├── api/                            # Spring Boot backend
 │   ├── src/
 │   │   └── main/
+│   │       ├── java/               # Controllers, services, repositories, entities and DTOs
 │   │       └── resources/
 │   │           ├── application.properties
-│   │           ├── schema.sql              # Database schema (DDL)
-│   │           └── data.sql                # Seed data (DML)
-│   ├── local.properties.example    # Template for your local DB credentials
+│   │           ├── schema.sql      # Database structure
+│   │           └── data.sql        # Exercise seed data
+│   ├── local.properties.example    # Template for local database credentials
+│   ├── Dockerfile
 │   └── pom.xml
-├── frontend/                       # React (Vite / TypeScript) frontend
+│
+├── frontend/                       # React / Vite / TypeScript frontend
+│   ├── public/
+│   │   └── exercises/              # Exercise images
 │   ├── src/
+│   │   ├── components/
+│   │   ├── data/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── styles/
+│   │   ├── types/
+│   │   └── utils/
+│   ├── Dockerfile
 │   ├── package.json
 │   └── vite.config.ts
-├── .env.example                    # Template for Docker Compose variables
-└── ASSESSMENT.md                   # The assessment brief
+│
+├── postman/                        # Postman API documentation and examples
+├── docs/                           # Project documentation assets
+├── .env.example                    # Template for Docker environment variables
+├── API_PLAN.md                     # API endpoint plan
+├── ASSESSMENT.md                   # Assessment brief
+├── docker-compose.yml
+└── README.md
 ```
 
 ---
 
 ## Prerequisites
 
-For Part 1 (running locally):
+To run the application locally:
 
-- [JDK 21](https://adoptium.net/) — the API targets Java 21
-- [Node.js 22+](https://nodejs.org/)
-- [MySQL 8](https://dev.mysql.com/downloads/mysql/) running on your machine
-- [Git](https://git-scm.com/)
+- Java 21
+- Node.js 22+
+- MySQL 8
+- Git
 
-For Part 2 (containerising):
+To run the full stack with Docker:
 
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- Docker Desktop
 
 ---
 
-## Part 1: Run the Starter Locally
+## Running the Application Locally
 
 ### 1. Create the database
 
-Connect to your local MySQL server and create an empty database:
+Connect to your local MySQL server and create an empty database.
+
+For example, if you are using the terminal:
+
+```bash
+mysql -u your_mysql_username -p
+```
+Then create the database:
 
 ```sql
-CREATE DATABASE fsd_project;
+CREATE DATABASE gym_workout_planner;
 ```
 
-You do not need to create any tables. The API creates them from `schema.sql` on startup.
+### 2. Configure the API database connection
 
-### 2. Configure your database credentials
+Local database credentials are stored in `api/local.properties`, which is ignored by Git.
 
-Your credentials live in `api/local.properties`, which is gitignored so it can never be committed. Create it from the template:
+From the `api` directory, copy the example file:
 
 ```bash
 cd api
 cp local.properties.example local.properties
 ```
 
-Open `api/local.properties` and set the values to match your MySQL installation:
+Update `local.properties` with your local MySQL details:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/fsd_project
-spring.datasource.username=your_local_mysql_user
-spring.datasource.password=your_local_mysql_password
+spring.datasource.url=jdbc:mysql://localhost:3306/gym_workout_planner
+spring.datasource.username=your_mysql_username
+spring.datasource.password=your_mysql_password
 ```
 
-> **Never put real credentials in `application.properties`.** That file is tracked by Git, so anything you write there ends up on GitHub. Keeping secrets out of your properties files is also a graded requirement of the assessment.
+Do not place real database credentials in `application.properties`, because that file is committed to the repository.
 
 ### 3. Start the API
 
@@ -85,10 +192,10 @@ From the `api` directory:
 ./mvnw spring-boot:run
 ```
 
-Wait for `Started ApiApplication`. You can check it directly:
+Wait for the application to finish starting. The API is available at:
 
-```bash
-curl http://localhost:8080/api/greeting
+```text
+http://localhost:8080
 ```
 
 ### 4. Start the frontend
@@ -97,191 +204,389 @@ In a second terminal, from the `frontend` directory:
 
 ```bash
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
 
-Open **http://localhost:5173**. You should see the seeded greeting from the database rendered on the page.
+Open:
 
-The frontend fetches the relative path `/api/greeting`. Vite's dev server proxies anything starting with `/api` to the backend, which is why the frontend never needs to know the API's absolute address. That proxy is configured in `frontend/vite.config.ts`.
+```text
+http://localhost:5173
+```
+
+The frontend sends requests to relative `/api` paths. During local development, Vite proxies these requests to the Spring Boot API running on port `8080`.
 
 ---
 
-## Database & Schema Management
+## Running with Docker
 
-Two SQL files under `api/src/main/resources` control the database:
+Docker Compose runs the frontend, API, and MySQL database together.
 
-- **`schema.sql`** — table definitions (DDL), such as `CREATE TABLE IF NOT EXISTS greetings ...`
-- **`data.sql`** — seed data (DML) inserted on startup
+### 1. Create the Docker environment file
 
-Because `application.properties` sets `spring.sql.init.mode=always`, **both scripts run on every single startup**, not just the first one. Your local MySQL keeps its data between restarts, so any plain `INSERT` in `data.sql` would add a duplicate row each time you start the API.
-
-This is why the seeded insert only runs when the table is empty:
-
-```sql
-INSERT INTO greetings (message)
-SELECT 'Hello World from Spring Boot Seed!'
-WHERE NOT EXISTS (SELECT 1 FROM greetings);
-```
-
-Write your own seed data so that re-running it is harmless.
-
-### Querying the database directly
-
-Running locally:
-
-```bash
-mysql -u your_local_mysql_user -p
-```
-
-Once you have containerised the stack, the same client is available inside the running database container:
-
-```bash
-docker compose exec db mysql -u your_mysql_user -p
-```
-
-Then, in either case:
-
-```sql
-USE fsd_project;
-SELECT * FROM greetings;
-```
-
----
-
-## Part 2: Containerise the Stack
-
-This part is assessed. See the Containerisation section of [ASSESSMENT.md](ASSESSMENT.md) for the marking criteria.
-
-### 1. Configure the environment variables
-
-Duplicate the template and fill it in with credentials of your choosing:
+From the project root:
 
 ```bash
 cp .env.example .env
 ```
 
-```bash
-MYSQL_ROOT_PASSWORD=your_secure_root_password
-MYSQL_DATABASE=a_database_name
-MYSQL_USER=a_database_user
-MYSQL_PASSWORD=your_user_password
+Set the Docker database values in `.env`:
+
+```env
+MYSQL_ROOT_PASSWORD=your_root_password
+MYSQL_DATABASE=workout_planner
+MYSQL_USER=workout_user
+MYSQL_PASSWORD=your_password
 ```
 
-`.env` is read by Docker Compose only. It has no effect on the local run in Part 1, which reads `api/local.properties` instead.
+The `.env` file is ignored by Git and should not be committed.
 
-### 2. Write the Dockerfiles
+### 2. Start the full stack
 
-Neither application ships with a Dockerfile, so you must add your own.
-
-#### `api/Dockerfile`
-
-- Use a multi-stage build.
-- The API targets Java 21, so pick base images to match.
-- `pom.xml` sets no `<finalName>` by default, so the jar is named after the artifact and version (`api-0.0.1-SNAPSHOT.jar`). You should either copy it with a wildcard to keep the Dockerfile working when the version changes, or set the `<finalName>` value explicitly.
-- Run the application as a non-root user rather than as `root`.
-- The app listens on port 8080.
-
-#### `frontend/Dockerfile`
-
-- Ensure the project's dependencies are installed exclusively from the lock file.
-- Use a start command that binds to all interfaces.
-- The app listens on port 5173.
-- Get the Vite dev server working before attempting the Nginx build for Stretch Goal A in [ASSESSMENT.md](ASSESSMENT.md).
-
-### 3. Write `docker-compose.yml`
-
-Add a Composer file in the project root. Your configuration must orchestrate three services:
-
-**`db`**
-
-- Uses a versioned `mysql` image
-- Takes its credentials from the four variables in `.env`
-- Persists its data in a named volume, so records survive a restart
-- Declares a healthcheck so other services can wait for it to be ready
-
-> **Watch out:** while MySQL sets itself up for the first time it runs a temporary internal server that accepts connections over a local socket but is not yet listening on port 3306. A healthcheck that talks to `localhost` will therefore report "healthy" too early, your API will start, and it will fail with `Connection refused`. Make sure your healthcheck tests a real network connection.
-
-**`api`**
-
-- Builds from `./api`.
-- Waits for `db` to report healthy before starting.
-- Receives `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME` and `SPRING_DATASOURCE_PASSWORD` as environment variables, derived from your `.env` values. 
-- Sets the correct host name in the service name.
-- Exposes port `8080`
-
-**`frontend`**
-
-- Builds from `./frontend`.
-- Sets the correct host name for `VITE_API_PROXY_TARGET` so the Vite proxy targets the API container.
-- Exposes port `5173`.
-
-You also need a **named volume** for the MySQL data and a **named network** that all three services join, so they can reach each other by service name in isolation from other containers.
-
-Nothing in the application code needs to change. The `SPRING_DATASOURCE_*` environment variables automatically override the values in `api/local.properties`, because [Spring Boot grants environment variables higher precedence than configuration files](https://docs.spring.io/spring-boot/reference/features/external-config.html).
-
-### 4. Launch the stack
+Make sure Docker Desktop is running, then from the project root run:
 
 ```bash
 docker compose up --build
 ```
 
-Docker coordinates the startup: the database initialises, the API waits for it to become healthy before connecting, and the frontend starts last.
+Docker Compose will:
+
+- start the MySQL database
+- wait for the database healthcheck to pass
+- start the Spring Boot API
+- start the React frontend
+- connect all three services through the `workout-network` Docker network
+- persist MySQL data in the `db-data` named volume
+
+### 3. Access the services
+
+| Service | Address |
+| --- | --- |
+| Frontend | `http://localhost:5173` |
+| API | `http://localhost:8080` |
+| MySQL | Available to the containers as the `db` service |
+
+Inside Docker, the API connects to MySQL using the `db` service name rather than `localhost`.
+
+The database connection values are supplied through Docker environment variables:
+
+- `SPRING_DATASOURCE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
+
+These override the local database settings when the API runs in Docker.
 
 ---
 
-## Accessing the Services
+## Stopping and Resetting Docker
 
-| Service     | Local (Part 1)                     | Docker (Part 2)                                |
-| ----------- | ---------------------------------- | ---------------------------------------------- |
-| Frontend UI | http://localhost:5173              | http://localhost:5173                          |
-| Backend API | http://localhost:8080/api/greeting | http://localhost:8080/api/greeting             |
-| Database    | localhost:3306                     | inside the Docker network, as the `db` service |
-
-Only one program can listen on a given port at a time, so stop your local MySQL before publishing the database container on port 3306, or map it to a spare host port such as `3307:3306`. The API container does not need that mapping either way, because it reaches the database over the Docker network.
-
----
-
-## Stopping and Resetting
-
-Stop the containers while keeping your database records:
+Stop the containers while keeping the database data:
 
 ```bash
 docker compose down
 ```
 
-Delete the containers **and** the stored data:
+Start them again with:
+
+```bash
+docker compose up --build
+```
+
+The named MySQL volume keeps the stored records between normal container restarts.
+
+To remove the containers and the stored MySQL data:
 
 ```bash
 docker compose down -v
 ```
 
-The `-v` flag removes the named volume holding the MySQL data. You need this whenever you change your `.env` credentials, because MySQL only creates its users and database the first time it starts against an empty data directory. Changing `.env` alone will not update an already-initialised volume.
+The `-v` option removes the `db-data` volume, so the next startup uses a fresh database.
 
 ---
 
-## Troubleshooting
+## Backend Architecture
 
-**`Failed to configure a DataSource: 'url' attribute is not specified`**
+The Spring Boot API follows a layered structure:
 
-The API cannot find your database settings. You most likely have not created `api/local.properties` yet — see Part 1, step 2.
+- **Controllers** handle HTTP requests and return API responses.
+- **Services** contain the application and business logic.
+- **Repositories** use Spring Data JPA to access and persist data in MySQL.
+- **Entities** represent the database tables and relationships.
+- **DTOs** define the request and response data used by the API.
 
-**The API starts but cannot find `local.properties`**
+Spring Data JPA is used to map the Java entities to the MySQL database and manage relationships between workouts, exercises, and workout exercises.
 
-That file is located relative to the directory you run the API from, so run `./mvnw spring-boot:run` from inside `api/`. If you launch the app from your IDE instead, set the run configuration's working directory to the `api` folder.
+---
 
-**`Access denied for user ... (using password: NO)`**
+## Database
 
-Your username or password is empty or wrong. If the username in the error is not one you recognise, the MySQL driver has fallen back to your operating system account, which means it received no username at all.
+The application uses three main tables.
 
-**`./mvnw test` fails**
+### `exercises`
 
-`ApiApplicationTests` starts the entire Spring context, including the database connection, so MySQL must be running and `local.properties` must be configured before the tests will pass.
+Stores the exercise list, including:
 
-**Code changes do not appear in a running container**
+- exercise name
+- muscle group
+- instructions
 
-Docker Compose does not rebuild an image just because you edited a file. After changing anything under `api/src`, rebuild:
+### `workout_plans`
+
+Stores each workout, including:
+
+- name
+- optional description
+- created timestamp
+- updated timestamp
+
+### `workout_plan_exercises`
+
+Links exercises to workouts and stores the values that belong to that workout, including:
+
+- target sets
+- target reps
+- exercise position, used to preserve the order exercises were added to the workout
+
+A workout can contain multiple exercises. The `workout_plan_exercises` table stores the relationship between a workout and its selected exercises.
+
+---
+
+## Database Seed Data
+
+The application comes pre-populated with a core exercise list so users can begin building workouts straight away.
+
+The list contains 24 exercises across eight muscle groups:
+
+- Chest
+- Back
+- Shoulders
+- Biceps
+- Triceps
+- Legs
+- Glutes
+- Core
+
+`schema.sql` contains the full database structure and `data.sql` contains the initial exercise data.
+
+The application uses `spring.sql.init.mode=always`, so the SQL initialisation scripts run whenever the API starts. The exercise seed inserts use presence checks so existing exercises are not inserted again on later startups.
+
+The workout tables are not populated with sample workouts because workouts are created by the user through the application.
+
+---
+
+## API Endpoints
+
+The application code uses `workout-plans` in its API routes and backend model names, while the user interface refers to these records simply as **workouts**.
+
+### Exercises
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/api/exercises` | Get all exercises |
+| `GET` | `/api/exercises?muscleGroup=BACK` | Get exercises matching the selected muscle group |
+
+The workout form loads the exercise list once and applies the muscle group filter on the client side. The filtered API endpoint is still available for direct API use.
+
+### Workouts
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/api/workout-plans` | Get all workouts |
+| `GET` | `/api/workout-plans/{id}` | Get one workout |
+| `POST` | `/api/workout-plans` | Create a workout with selected exercises and target sets/reps |
+| `PUT` | `/api/workout-plans/{id}` | Update a workout and its exercises |
+| `DELETE` | `/api/workout-plans/{id}` | Delete a workout and its exercises |
+
+### Workout Exercises
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| `GET` | `/api/workout-plans/{workoutPlanId}/workout-plan-exercises` | Get the exercises saved in a workout in their saved order |
+
+---
+
+## Example Workout Request
+
+The create and update endpoints send the workout details and selected exercises together.
+
+```json
+{
+  "name": "Upper Body Workout",
+  "description": "Chest, back and arms",
+  "exercises": [
+    {
+      "exerciseId": 1,
+      "targetSets": 3,
+      "targetReps": 10
+    },
+    {
+      "exerciseId": 2,
+      "targetSets": 3,
+      "targetReps": 12
+    }
+  ]
+}
+```
+
+---
+
+## Validation and Error Handling
+
+Workout data is validated on both the frontend and backend.
+
+Validation includes:
+
+- workout name is required
+- workout name must be 255 characters or fewer
+- workout name must contain at least one letter or number
+- description must be 1000 characters or fewer
+- at least one exercise must be selected
+- exercise IDs must be valid positive values
+- target sets and target reps must be positive values
+
+The frontend displays validation messages close to the relevant form fields where possible.
+
+The backend uses centralised exception handling with `@RestControllerAdvice` to return appropriate HTTP responses for validation failures, missing resources, invalid muscle groups, and duplicate workout exercises.
+
+---
+
+## Using the Application
+
+### Dashboard
+
+The dashboard is the starting point of the application. It displays the user's saved workouts as cards, with the most recently created or edited workouts shown first.
+
+Each card shows the workout name, optional description, number of exercises, and when the workout was created or last edited.
+
+If no workouts have been created yet, an empty state is shown with an option to create the first workout. Once workouts exist, the **Create** option remains available from the dashboard so more workouts can be added. Selecting a workout card opens its details page.
+
+### Creating a Workout
+
+Selecting **Create** opens the workout form. A **Back** link at the top of the page allows the user to return to the dashboard at any time.
+
+The user can enter a workout name and an optional description, then choose exercises from the exercise list. The full exercise list is loaded when the form opens and can be filtered by muscle group to make individual exercises easier to find.
+
+When an exercise is added, it moves into the **In This Workout** section with default target sets and reps. These values can be changed to suit the workout, and exercises can also be removed before saving.
+
+Exercises are kept in the order they were added so the same order can be shown when the workout is viewed later.
+
+The form validates the workout before it is submitted. A name and at least one exercise are required, and validation messages are shown alongside the relevant fields.
+
+If the user tries to leave the page — either by selecting **Back** or navigating away another way — after making changes without saving them, a confirmation prompt allows them to either stay on the form or discard the changes.
+
+When **Save** is selected, the workout and its selected exercises are sent to the API. Once the workout has been successfully created, the user is taken directly to the details page for the new workout.
+
+### Viewing a Workout
+
+The workout details page shows the workout name, optional description, and the list of exercises included in that workout.
+
+Each exercise displays its image, muscle group, and the target sets and reps saved for that workout. The exercises are returned in the same order in which they were originally added.
+
+The page also provides **Edit** and **Delete** options, as well as a **Back to workouts** link to return to the dashboard.
+
+Each exercise in the workout can be selected to open its own details page.
+
+### Viewing Exercise Details
+
+Selecting an exercise opens a detailed view of that exercise.
+
+The page shows the exercise image, name, muscle group, the target sets and reps for the current workout, and written instructions explaining how to perform the movement.
+
+The image gives the user a quick visual reference for the exercise, while the written instructions provide further guidance.
+
+Selecting **Back to workout** returns the user to the workout they were previously viewing.
+
+### Editing a Workout
+
+Selecting **Edit** from the workout details page reopens the workout form with the existing name, description, exercises, sets, and reps already filled in.
+
+The user can then:
+
+- change the workout name or description
+- add new exercises
+- remove existing exercises
+- change target sets or reps
+
+When the edited workout is saved, the existing workout is updated rather than creating a new one. Exercises that remain in the workout are updated, newly selected exercises are added, and exercises that were removed from the form are removed from that workout.
+
+The updated workout is then shown again on its details page.
+
+As with creating a workout, the user is warned if they attempt to leave the edit form with unsaved changes.
+
+### Deleting a Workout
+
+Selecting **Delete** from the workout details page opens a confirmation pop-up before anything is removed.
+
+The user can cancel the action and remain on the workout, or confirm the deletion. Once confirmed, the workout is deleted and the user is returned to the dashboard.
+
+---
+
+## API Documentation
+
+A summary of the available endpoints is provided in the [API endpoint plan](API_PLAN.md).
+
+Detailed API documentation is provided through the Postman collection in the [`postman`](postman/) folder.
+
+The collection contains the current API requests for:
+
+- exercise retrieval and filtering
+- workout CRUD operations
+- exercises belonging to a workout
+
+The saved requests include the expected HTTP methods, request parameters, request bodies, response examples, and status codes for testing the API.
+
+When running locally:
+
+- The frontend application opens at [http://localhost:5173](http://localhost:5173), where `/` is the dashboard.
+- The API runs on `http://localhost:8080`.
+- API endpoints are accessed through routes such as [http://localhost:8080/api/exercises](http://localhost:8080/api/exercises).
+
+---
+
+## Useful Commands
+
+### Frontend production build
+
+From the `frontend` directory:
+
+```bash
+npm run build
+```
+
+### Start the API locally
+
+From the `api` directory:
+
+```bash
+./mvnw spring-boot:run
+```
+
+### Build and start the full Docker stack
+
+From the project root:
 
 ```bash
 docker compose up --build
 ```
+
+### Stop Docker while keeping database data
+
+```bash
+docker compose down
+```
+
+### Reset the Docker database completely
+
+```bash
+docker compose down -v
+```
+
+### Connect to the Docker MySQL database
+
+From the project root:
+
+```bash
+docker compose exec db mysql -uworkout_user -p workout_planner
+```
+
+Enter the password from your .env file when prompted.

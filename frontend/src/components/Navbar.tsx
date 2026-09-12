@@ -15,10 +15,11 @@ function Navbar() {
             </Group>
           </Link>
           <Group gap="xs">
+           {/* Static placeholder user - authentication is not implemented. */}
             <Avatar classNames={{ placeholder: 'avatarColour' }} radius="xl">
-                D
+              A
             </Avatar>
-            <Text className="accountName">Hi, Diamond 👋</Text>
+            <Text className="accountName">Hi, Alex 👋</Text>
           </Group>
         </Group>
       </Container>
