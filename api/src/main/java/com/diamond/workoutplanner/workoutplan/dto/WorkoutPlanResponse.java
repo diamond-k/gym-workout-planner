@@ -1,12 +1,12 @@
 package com.diamond.workoutplanner.workoutplan.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record WorkoutPlanResponse(
         int id,
         String name,
         String description,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        Instant createdAt,
+        Instant updatedAt
 ) {
 }
