@@ -14,7 +14,7 @@ public record CreateWorkoutPlanRequest(
     @NotBlank(message = "Workout name is required")
     @Size(max = 255, message = "Workout name must be 255 characters or less")
     @Pattern(
-        regexp = ".*[\\p{L}\\p{N}].*",
+        regexp = "^\\s*$|.*[\\p{L}\\p{N}].*",
         message = "Name must contain at least one letter or number"
     )
     String name,

@@ -1,10 +1,10 @@
 # Workout Planner
 
-A web application for creating and managing workouts.
+A web application for creating and managing workouts. 
 
 Users can build workouts from an exercise list, filter exercises by muscle group, set target sets and reps, edit existing workouts, and view exercise instructions and images.
 
-The application uses a React and TypeScript frontend, a Spring Boot REST API, and a MySQL database. Docker Compose is used to run the frontend, API, and database together.
+The application uses a React and TypeScript frontend, a Spring Boot REST API, and a MySQL database, with a layered Controller → Service → Repository backend architecture and centralised exception handling. Data is validated on both the frontend and backend, and the full stack runs together via Docker Compose.
 
 ---
 
@@ -555,13 +555,35 @@ From the project root:
 docker compose up --build
 ```
 
+### Start the API and database only
+
+If the frontend is not needed, for example when testing the API with Postman, run from the project root:
+
+```bash
+docker compose up -d db api
+```
+
+This starts the MySQL database and Spring Boot API without starting the frontend.
+
+- `docker compose up --build` starts the full application: database, API, and frontend.
+- `docker compose up -d db api` starts only the database and API, which is useful for Postman testing.
+
+If backend code has changed, add `--build` to rebuild the API image from the latest local source before starting it: 
+```bash 
+docker compose up --build -d db api
+```
+
 ### Stop Docker while keeping database data
+
+From the project root:
 
 ```bash
 docker compose down
 ```
 
 ### Reset the Docker database completely
+
+From the project root:
 
 ```bash
 docker compose down -v
@@ -575,7 +597,7 @@ From the project root:
 docker compose exec db mysql -uworkout_user -p workout_planner
 ```
 
-Enter the password from your .env file when prompted.
+Enter the password from your `.env` file when prompted.
 
 ### Restart the Docker API
 

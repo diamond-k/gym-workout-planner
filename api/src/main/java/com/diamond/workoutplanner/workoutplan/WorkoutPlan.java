@@ -28,7 +28,10 @@ public class WorkoutPlan {
 
     @NotBlank(message = "Name is required")
     @Size(max = 255, message = "Name must be 255 characters or less")
-    @Pattern(regexp = ".*[\\p{L}\\p{N}].*", message = "Name must contain at least one letter or number")
+    @Pattern(
+        regexp = "^\\s*$|.*[\\p{L}\\p{N}].*",
+        message = "Name must contain at least one letter or number"
+    )
     @Column(nullable = false)
     private String name;
 
