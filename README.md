@@ -23,7 +23,7 @@ The application is built with React and TypeScript on the frontend, a Spring Boo
 - Validate workout data on both the frontend and backend
 - Responsive layout for desktop and mobile
 - Persist workout data in MySQL
-- Cover core workout service behaviour with backend unit tests
+- Test core workout creation, editing, and deletion logic with backend unit tests
 - Run the frontend, API, and database together with Docker Compose
 
 ---
