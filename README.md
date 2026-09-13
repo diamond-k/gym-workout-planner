@@ -571,112 +571,153 @@ When running locally:
 
 ## Useful Commands
 
-### Frontend production build
+### Frontend
 
-From the `frontend` directory:
+From the `frontend` directory, start the app locally with:
+
+```bash
+npm run dev
+```
+
+Create a production build with:
 
 ```bash
 npm run build
 ```
 
-### Start the API locally
+### Backend
 
-From the `api` directory:
+From the `api` directory, start the Spring Boot API locally with:
 
 ```bash
 ./mvnw spring-boot:run
 ```
 
-### Run backend tests
+Build the backend and create the JAR file with:
 
-From the `api` directory:
+```bash
+./mvnw clean package
+```
+
+Run all backend tests with:
 
 ```bash
 ./mvnw test
 ```
 
-### Build and start the full Docker stack
+Run only the workout service tests with:
 
-From the project root:
+```bash
+./mvnw -Dtest=WorkoutPlanServiceTest test
+```
+
+### Docker
+
+All Docker commands below should be run from the project root.
+
+Start the full stack and keep the logs visible in the terminal:
 
 ```bash
 docker compose up --build
 ```
 
-### Start the API and database only
+Start the full stack in the background:
 
-If the frontend is not needed, for example when testing the API with Postman, run from the project root:
+```bash
+docker compose up --build -d
+```
+
+#### Rebuild the frontend
+
+If frontend code has changed:
+
+```bash
+docker compose up --build -d frontend
+```
+
+If only the frontend needs rebuilding and the API and database should be left running as they are:
+
+```bash
+docker compose up --build -d --no-deps frontend
+```
+
+#### Rebuild the API
+
+If backend code has changed:
+
+```bash
+docker compose up --build -d api
+```
+
+#### Start only the API and database
+
+This is useful when the frontend is not needed, for example when testing API endpoints directly:
 
 ```bash
 docker compose up -d db api
 ```
 
-This starts the MySQL database and Spring Boot API without starting the frontend.
-
-- `docker compose up --build` starts the full application: database, API, and frontend.
-- `docker compose up -d db api` starts only the database and API, which is useful for Postman testing.
-
-If backend code has changed, add `--build` to rebuild the API image from the latest local source before starting it:
+If backend code has changed and the API also needs rebuilding:
 
 ```bash
 docker compose up --build -d db api
 ```
 
-### Stop and remove Docker containers while keeping database data
-
-From the project root:
+#### Check container status
 
 ```bash
-docker compose down
+docker compose ps
 ```
 
-This stops and removes the containers and Docker Compose network, while preserving the named MySQL volume and its stored data.
-
-### Reset the Docker database completely
-
-From the project root:
+#### Check recent API logs
 
 ```bash
-docker compose down -v
+docker compose logs api --tail=50
 ```
 
-The `-v` option also removes the named MySQL volume, including any workouts stored in that Docker database. Use this only when a fresh database is needed.
+#### Stop the API only
 
-### Connect to the Docker MySQL database
-
-From the project root:
-
-```bash
-docker compose exec db mysql -uworkout_user -p workout_planner
-```
-
-Enter the password from your `.env` file when prompted.
-
-### Restart the Docker API
-
-From the project root:
-
-```bash
-docker compose restart api
-```
-
-This restarts only the API container without resetting the database or restarting the rest of the stack.
-
-### Stop the Docker API only
-
-From the project root:
+This leaves the frontend and database running:
 
 ```bash
 docker compose stop api
 ```
 
-This stops the API container while leaving the frontend and database running, which is useful for checking how the frontend handles API errors.
-
-Start the API again with:
+Start it again with:
 
 ```bash
 docker compose start api
 ```
+
+#### Restart the API
+
+```bash
+docker compose restart api
+```
+
+#### Stop the full Docker stack but keep the database data
+
+```bash
+docker compose down
+```
+
+The MySQL named volume is kept, so saved workouts remain available the next time the stack starts.
+
+#### Reset the Docker database
+
+```bash
+docker compose down -v
+```
+
+The `-v` option also removes the MySQL volume, so any workouts stored in that Docker database will be deleted. Use this only when a fresh database is needed.
+
+#### Connect to the Docker MySQL database
+
+```bash
+docker compose exec db mysql -uworkout_user -p workout_planner
+```
+
+Enter the password from the `.env` file when prompted.
 
 ## Troubleshooting
 

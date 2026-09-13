@@ -34,7 +34,7 @@ public class WorkoutPlanService {
     public WorkoutPlan getWorkoutPlanById(int id) {
         return workoutPlanRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Workout plan not found with id: " + id));
+                        "Workout not found with id: " + id));
     }
 
     @Transactional
@@ -52,7 +52,7 @@ public class WorkoutPlanService {
             
             if (!exerciseIds.add(requestExercise.exerciseId())) {
                 throw new DuplicateWorkoutPlanExerciseException(
-                        "Exercise is already in this workout plan"
+                        "Exercise is already in this workout"
                 );
             }
 
@@ -86,7 +86,7 @@ public class WorkoutPlanService {
         workoutPlan.setName(name);
         workoutPlan.setDescription(description);
 
-        // store the exercises already in the plan, using exerciseId as the key
+        // store the exercises already in the workout, using exerciseId as the key
         Map<Integer, WorkoutPlanExercise> existingExercises = new HashMap<>();
 
         for (WorkoutPlanExercise workoutPlanExercise : workoutPlan.getExercises()) {
@@ -107,7 +107,7 @@ public class WorkoutPlanService {
 
             if (!incomingExerciseIds.add(exerciseId)) {
                 throw new DuplicateWorkoutPlanExerciseException(
-                        "Exercise is already in this workout plan"
+                        "Exercise is already in this workout"
                 );
             }
 

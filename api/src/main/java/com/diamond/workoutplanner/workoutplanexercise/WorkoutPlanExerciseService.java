@@ -12,7 +12,7 @@ WorkoutPlanExerciseRepository
 - create/update/delete the WorkoutPlanExercise
 
 WorkoutPlanRepository
-- finds the workout plan it belongs to
+- finds the workout it belongs to
 */
 
 @Service
@@ -35,7 +35,7 @@ public class WorkoutPlanExerciseService {
 
         workoutPlanRepository.findById(workoutPlanId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Workout plan not found with id: " + workoutPlanId));
+                        "Workout not found with id: " + workoutPlanId));
 
         return workoutPlanExerciseRepository.findByWorkoutPlanIdOrderByPositionAsc(workoutPlanId);
     }

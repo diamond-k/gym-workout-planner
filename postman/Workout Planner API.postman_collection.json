@@ -1,0 +1,1091 @@
+{
+  "info": {
+    "_postman_id": "fdd8b881-7bed-41a1-87eb-324d7f87f505",
+    "name": "Workout Planner API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48640079",
+    "_collection_link": "https://go.postman.co/collection/48640079-fdd8b881-7bed-41a1-87eb-324d7f87f505?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get all exercises",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/exercises",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "exercises"
+          ]
+        },
+        "description": "`Returns all exercises available in the exercise list.`"
+      },
+      "response": [
+        {
+          "name": "Get all exercises",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "exercises"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "4592"
+            },
+            {
+              "key": "date",
+              "value": "Sat, 12 Sep 2026 14:33:53 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n  {\n    \"id\": 1,\n    \"name\": \"Bench Press\",\n    \"muscleGroup\": \"CHEST\",\n    \"instructions\": \"Lie on the bench, lower the bar towards your chest, then press it back up.\"\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Lat Pulldown\",\n    \"muscleGroup\": \"BACK\",\n    \"instructions\": \"Pull the bar towards your upper chest while keeping your torso controlled.\"\n  },\n  {\n    \"id\": 3,\n    \"name\": \"Shoulder Press\",\n    \"muscleGroup\": \"SHOULDERS\",\n    \"instructions\": \"Press the weight overhead until your arms are extended, then lower with control.\"\n  },\n  {\n    \"id\": 4,\n    \"name\": \"Bicep Curl\",\n    \"muscleGroup\": \"BICEPS\",\n    \"instructions\": \"Curl the weight towards your shoulders while keeping your elbows close to your body.\"\n  },\n  {\n    \"id\": 5,\n    \"name\": \"Tricep Pushdown\",\n    \"muscleGroup\": \"TRICEPS\",\n    \"instructions\": \"Push the handle down until your arms are extended, then return with control.\"\n  },\n  {\n    \"id\": 6,\n    \"name\": \"Leg Extension\",\n    \"muscleGroup\": \"LEGS\",\n    \"instructions\": \"Extend your knees until your legs are straight, then lower the weight slowly.\"\n  },\n  {\n    \"id\": 7,\n    \"name\": \"Hip Thrust\",\n    \"muscleGroup\": \"GLUTES\",\n    \"instructions\": \"Rest your upper back against a bench with the barbell across your hips. Drive through your heels and lift your hips until your torso and thighs form a straight line, squeeze your glutes, then lower with control.\"\n  },\n  {\n    \"id\": 8,\n    \"name\": \"Crunch\",\n    \"muscleGroup\": \"CORE\",\n    \"instructions\": \"Lie on your back with knees bent and feet flat. Brace your abs, lift your shoulders and upper back towards your knees, then lower slowly while keeping your lower back on the floor.\"\n  },\n  {\n    \"id\": 9,\n    \"name\": \"Dumbbell Fly\",\n    \"muscleGroup\": \"CHEST\",\n    \"instructions\": \"Keep a slight bend in your elbows, lower the weights out to your sides, then bring them together over your chest.\"\n  },\n  {\n    \"id\": 10,\n    \"name\": \"Push Up\",\n    \"muscleGroup\": \"CHEST\",\n    \"instructions\": \"Start in a high plank with your hands slightly wider than shoulder-width. Lower your chest toward the floor while keeping your body straight, then push back up.\"\n  },\n  {\n    \"id\": 11,\n    \"name\": \"Seated Row\",\n    \"muscleGroup\": \"BACK\",\n    \"instructions\": \"Sit tall with your feet braced and arms extended. Pull the handle toward your lower ribs while drawing your shoulder blades back, then extend your arms with control.\"\n  },\n  {\n    \"id\": 12,\n    \"name\": \"Pull Up\",\n    \"muscleGroup\": \"BACK\",\n    \"instructions\": \"Pull your body up until your chin clears the bar, then lower with control.\"\n  },\n  {\n    \"id\": 13,\n    \"name\": \"Lateral Raise\",\n    \"muscleGroup\": \"SHOULDERS\",\n    \"instructions\": \"Raise the weights out to your sides to shoulder height, then lower with control.\"\n  },\n  {\n    \"id\": 14,\n    \"name\": \"Front Raise\",\n    \"muscleGroup\": \"SHOULDERS\",\n    \"instructions\": \"Raise the weights in front of you to shoulder height, then lower with control.\"\n  },\n  {\n    \"id\": 15,\n    \"name\": \"Hammer Curl\",\n    \"muscleGroup\": \"BICEPS\",\n    \"instructions\": \"Curl the weights up with your palms facing inward, then lower with control.\"\n  },\n  {\n    \"id\": 16,\n    \"name\": \"Cable Curl\",\n    \"muscleGroup\": \"BICEPS\",\n    \"instructions\": \"Curl the cable toward your shoulders, then return with control.\"\n  },\n  {\n    \"id\": 17,\n    \"name\": \"Tricep Dip\",\n    \"muscleGroup\": \"TRICEPS\",\n    \"instructions\": \"Place your hands on the edge of a bench behind you and move your hips just off the bench. Bend your elbows to lower your body, then press through your hands to return to the start.\"\n  },\n  {\n    \"id\": 18,\n    \"name\": \"Tricep Extension\",\n    \"muscleGroup\": \"TRICEPS\",\n    \"instructions\": \"Hold the dumbbell overhead, bend your elbows to lower it behind your head, then extend your arms back up.\"\n  },\n  {\n    \"id\": 19,\n    \"name\": \"Barbell Squat\",\n    \"muscleGroup\": \"LEGS\",\n    \"instructions\": \"Rest the bar across your upper back, bend your knees and push your hips back until your thighs are around parallel to the floor, then drive through your feet to stand.\"\n  },\n  {\n    \"id\": 20,\n    \"name\": \"Dumbbell Lunge\",\n    \"muscleGroup\": \"LEGS\",\n    \"instructions\": \"Hold a dumbbell in each hand, step forward and lower until your front thigh is around parallel to the floor, then push through your front foot to return to standing.\"\n  },\n  {\n    \"id\": 21,\n    \"name\": \"Glute Bridge\",\n    \"muscleGroup\": \"GLUTES\",\n    \"instructions\": \"Lie on your back with your knees bent and feet flat. Drive through your heels, squeeze your glutes and lift your hips until your body forms a straight line from your shoulders to your knees, then lower with control.\"\n  },\n  {\n    \"id\": 22,\n    \"name\": \"Cable Kickback\",\n    \"muscleGroup\": \"GLUTES\",\n    \"instructions\": \"Extend one leg behind you while keeping your hips steady, then return with control.\"\n  },\n  {\n    \"id\": 23,\n    \"name\": \"Plank\",\n    \"muscleGroup\": \"CORE\",\n    \"instructions\": \"Lie face down on the floor. Balance yourself on your forearms and toes, keeping your shoulders and buttocks at the same height. Hold this position for the desired length of time while contracting your abs.\"\n  },\n  {\n    \"id\": 24,\n    \"name\": \"Bicycle Crunch\",\n    \"muscleGroup\": \"CORE\",\n    \"instructions\": \"Bring one knee toward your chest while rotating your torso toward it, then alternate sides.\"\n  }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Get exercises by muscle group",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/exercises?muscleGroup=BACK",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "exercises"
+          ],
+          "query": [
+            {
+              "key": "muscleGroup",
+              "value": "BACK"
+            }
+          ]
+        },
+        "description": "Returns exercises that match the selected muscle group."
+      },
+      "response": [
+        {
+          "name": "Get exercises by muscle group",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises?muscleGroup=back",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "exercises"
+              ],
+              "query": [
+                {
+                  "key": "muscleGroup",
+                  "value": "back"
+                }
+              ]
+            }
+          },
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "519"
+            },
+            {
+              "key": "date",
+              "value": "Sat, 12 Sep 2026 14:36:02 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n  {\n    \"id\": 2,\n    \"name\": \"Lat Pulldown\",\n    \"muscleGroup\": \"BACK\",\n    \"instructions\": \"Pull the bar towards your upper chest while keeping your torso controlled.\"\n  },\n  {\n    \"id\": 11,\n    \"name\": \"Seated Row\",\n    \"muscleGroup\": \"BACK\",\n    \"instructions\": \"Sit tall with your feet braced and arms extended. Pull the handle toward your lower ribs while drawing your shoulder blades back, then extend your arms with control.\"\n  },\n  {\n    \"id\": 12,\n    \"name\": \"Pull Up\",\n    \"muscleGroup\": \"BACK\",\n    \"instructions\": \"Pull your body up until your chin clears the bar, then lower with control.\"\n  }\n]"
+        },
+        {
+          "name": "Get exercises by muscle group - Invalid muscle group",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/exercises?muscleGroup=CARDIO",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "exercises"
+              ],
+              "query": [
+                {
+                  "key": "muscleGroup",
+                  "value": "CARDIO"
+                }
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "content-length",
+              "value": "28"
+            },
+            {
+              "key": "date",
+              "value": "Sat, 12 Sep 2026 14:38:00 GMT"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "Invalid muscle group: CARDIO"
+        }
+      ]
+    },
+    {
+      "name": "Create workout",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Upper Body Workout\",\n  \"description\": \"Chest, back and arms\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 3,\n      \"targetReps\": 10\n    },\n    {\n      \"exerciseId\": 2,\n      \"targetSets\": 3,\n      \"targetReps\": 12\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans"
+          ]
+        },
+        "description": "Creates a new workout with a name, optional description, selected exercises, and target sets and reps."
+      },
+      "response": [
+        {
+          "name": "Create workout",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Upper Body Workout\",\n  \"description\": \"Chest, back and arms\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 3,\n      \"targetReps\": 10\n    },\n    {\n      \"exerciseId\": 2,\n      \"targetSets\": 3,\n      \"targetReps\": 12\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "159"
+            },
+            {
+              "key": "date",
+              "value": "Sat, 12 Sep 2026 14:39:42 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"id\": 1,\n  \"name\": \"Upper Body Workout\",\n  \"description\": \"Chest, back and arms\",\n  \"createdAt\": \"2026-09-12T14:39:42.23945322Z\",\n  \"updatedAt\": \"2026-09-12T14:39:42.23945322Z\"\n}"
+        },
+        {
+          "name": "Create workout - blank name",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"\",\n  \"description\": \"Invalid example\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 3,\n      \"targetReps\": 10\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "35"
+            },
+            {
+              "key": "date",
+              "value": "Sat, 12 Sep 2026 15:10:28 GMT"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"name\": \"Workout name is required\"\n}"
+        },
+        {
+          "name": "Create workout - invalid character",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"///\",\n    \"description\": \"Invalid example\",\n    \"exercises\": [\n        {\n            \"exerciseId\": 1,\n            \"targetSets\": 3,\n            \"targetReps\": 10\n        }\n    ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "58"
+            },
+            {
+              "key": "date",
+              "value": "Sat, 12 Sep 2026 15:11:21 GMT"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"name\": \"Name must contain at least one letter or number\"\n}"
+        },
+        {
+          "name": "Create workout - No exercises selected",
+          "originalRequest": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Empty Workout\",\n  \"description\": \"No exercises selected\",\n  \"exercises\": []\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "49"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:37:41 GMT"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"exercises\": \"At least one exercise is required\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get all workouts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans"
+          ]
+        },
+        "description": "Returns all saved workouts, ordered with the most recently created or edited first."
+      },
+      "response": [
+        {
+          "name": "Get all workouts",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "313"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:19:22 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n  {\n    \"id\": 2,\n    \"name\": \"Upper Body Workout\",\n    \"description\": \"Chest, back and arms\",\n    \"createdAt\": \"2026-09-12T15:20:13.370782Z\",\n    \"updatedAt\": \"2026-09-12T15:20:13.370782Z\"\n  },\n  {\n    \"id\": 1,\n    \"name\": \"Upper Body Workout\",\n    \"description\": \"Chest, back and arms\",\n    \"createdAt\": \"2026-09-12T14:39:42.239453Z\",\n    \"updatedAt\": \"2026-09-12T14:39:42.239453Z\"\n  }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Get workout by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/2",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "2"
+          ]
+        },
+        "description": "Returns a single workout by its ID."
+      },
+      "response": [
+        {
+          "name": "Get workout by id",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "2"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "155"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:05:05 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"id\": 2,\n  \"name\": \"Upper Body Workout\",\n  \"description\": \"Chest, back and arms\",\n  \"createdAt\": \"2026-09-12T15:20:13.370782Z\",\n  \"updatedAt\": \"2026-09-12T15:20:13.370782Z\"\n}"
+        },
+        {
+          "name": "Get workout by id - Not found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/777",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "777"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "content-length",
+              "value": "30"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 13:50:11 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "Workout not found with id: 777",
+          "status": "Not Found",
+          "code": 404
+        }
+      ]
+    },
+    {
+      "name": "Update workout",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Updated Upper Body Workout\",\n  \"description\": \"Updated chest and shoulders workout\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 4,\n      \"targetReps\": 8\n    },\n    {\n      \"exerciseId\": 3,\n      \"targetSets\": 3,\n      \"targetReps\": 12\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/2",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "2"
+          ]
+        },
+        "description": "Updates an existing workout, including its details, selected exercises, and target sets and reps."
+      },
+      "response": [
+        {
+          "name": "Update workout",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Upper Body Workout\",\n  \"description\": \"Updated chest and shoulders workout\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 4,\n      \"targetReps\": 8\n    },\n    {\n      \"exerciseId\": 3,\n      \"targetSets\": 3,\n      \"targetReps\": 12\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "2"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "181"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:24:17 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"id\": 2,\n  \"name\": \"Updated Upper Body Workout\",\n  \"description\": \"Updated chest and shoulders workout\",\n  \"createdAt\": \"2026-09-12T15:20:13.370782Z\",\n  \"updatedAt\": \"2026-09-13T06:24:17.109734586Z\"\n}"
+        },
+        {
+          "name": "Update workout - Invalid Workout Data",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"---\",\n  \"description\": \"Invalid update example\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 3,\n      \"targetReps\": 10\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "2"
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "58"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:42:04 GMT"
+            },
+            {
+              "key": "connection",
+              "value": "close"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"name\": \"Name must contain at least one letter or number\"\n}"
+        },
+        {
+          "name": "Update workout - Duplicate Exercise",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Duplicate Exercise Test\",\n  \"description\": \"Tests duplicate exercise validation\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 3,\n      \"targetReps\": 10\n    },\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 4,\n      \"targetReps\": 8\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "2"
+              ]
+            }
+          },
+          "status": "Conflict",
+          "code": 409,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "content-length",
+              "value": "40"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:44:03 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "Exercise is already in this workout"
+        },
+        {
+          "name": "Update workout - Workout Not Found",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Upper Body Workout\",\n  \"description\": \"Updated chest and shoulders workout\",\n  \"exercises\": [\n    {\n      \"exerciseId\": 1,\n      \"targetSets\": 4,\n      \"targetReps\": 8\n    },\n    {\n      \"exerciseId\": 3,\n      \"targetSets\": 3,\n      \"targetReps\": 12\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/777",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "777"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "content-length",
+              "value": "30"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 13:54:31 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "Workout not found with id: 777",
+          "status": "Not Found",
+          "code": 404
+        }
+      ]
+    },
+    {
+      "name": "Get workout exercises",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/2/workout-plan-exercises",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "2",
+            "workout-plan-exercises"
+          ]
+        },
+        "description": "Returns the exercises saved in a workout, including their details, target sets and reps, in the order they were added."
+      },
+      "response": [
+        {
+          "name": "Get workout exercises",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/2/workout-plan-exercises",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "2",
+                "workout-plan-exercises"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "content-length",
+              "value": "409"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:28:42 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n  {\n    \"id\": 3,\n    \"exerciseId\": 1,\n    \"exerciseName\": \"Bench Press\",\n    \"muscleGroup\": \"CHEST\",\n    \"instructions\": \"Lie on the bench, lower the bar towards your chest, then press it back up.\",\n    \"targetSets\": 4,\n    \"targetReps\": 8\n  },\n  {\n    \"id\": 5,\n    \"exerciseId\": 3,\n    \"exerciseName\": \"Shoulder Press\",\n    \"muscleGroup\": \"SHOULDERS\",\n    \"instructions\": \"Press the weight overhead until your arms are extended, then lower with control.\",\n    \"targetSets\": 3,\n    \"targetReps\": 12\n  }\n]"
+        },
+        {
+          "name": "Get workout exercises - Not found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/777/workout-plan-exercises",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "777",
+                "workout-plan-exercises"
+              ]
+            }
+          },
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "content-length",
+              "value": "30"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 13:49:40 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "Workout not found with id: 777",
+          "status": "Not Found",
+          "code": 404
+        }
+      ]
+    },
+    {
+      "name": "Delete workout",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/workout-plans/2",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "workout-plans",
+            "2"
+          ]
+        },
+        "description": "Deletes an existing workout and its saved exercise relationships."
+      },
+      "response": [
+        {
+          "name": "Delete workout - workout deleted",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/2",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "2"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "content-length",
+              "value": "0"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:53:51 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "Delete workout - Not found",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/workout-plans/777",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "workout-plans",
+                "777"
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "text/plain;charset=UTF-8"
+            },
+            {
+              "key": "content-length",
+              "value": "35"
+            },
+            {
+              "key": "date",
+              "value": "Sun, 13 Sep 2026 06:55:22 GMT"
+            },
+            {
+              "key": "keep-alive",
+              "value": "timeout=60"
+            },
+            {
+              "key": "connection",
+              "value": "keep-alive"
+            }
+          ],
+          "cookie": [],
+          "body": "Workout not found with id: 777"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}
