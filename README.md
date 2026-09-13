@@ -2,7 +2,7 @@
 
 Workout Planner is a full-stack web application for creating, organising, and managing personalised workouts.
 
-Users can create personalised workouts from a pre-populated exercise list, filter options by muscle group, and set target sets and reps for each exercise. Saved workouts can be edited or deleted, and each exercise includes an image and instructions on how to perform it. When a workout is saved, the selected exercise order, sets, and reps are retained.
+Users can create personalised workouts from a pre-populated exercise list, filter exercises by muscle group, and set target sets and reps for each exercise. Saved workouts can be edited or deleted, and each exercise includes an image and instructions on how to perform it. When a workout is saved, the selected exercise order, sets, and reps are retained.
 
 The application is built with React and TypeScript on the frontend, a Spring Boot REST API on the backend, and MySQL for persistent data storage. The backend follows a layered Controller, Service, and Repository architecture using Spring Data JPA, DTOs, validation, and centralised exception handling. Validation is applied on both the frontend and backend, and the full application can be run together using Docker Compose.
 
