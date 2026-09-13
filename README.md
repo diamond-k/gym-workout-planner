@@ -1,10 +1,10 @@
 # Workout Planner
 
-A web application for creating and managing workouts. 
+Workout Planner is a full-stack web application for creating, organising, and managing personalised workouts.
 
-Users can build workouts from an exercise list, filter exercises by muscle group, set target sets and reps, edit existing workouts, and view exercise instructions and images.
+Users can create personalised workouts from a pre-populated exercise list, filter options by muscle group, and set target sets and reps for each exercise. Saved workouts can be edited or deleted, and each exercise includes an image and instructions on how to perform it. When a workout is saved, the selected exercise order, sets, and reps are retained.
 
-The application uses a React and TypeScript frontend, a Spring Boot REST API, and a MySQL database, with a layered Controller → Service → Repository backend architecture and centralised exception handling. Data is validated on both the frontend and backend, and the full stack runs together via Docker Compose.
+The application is built with React and TypeScript on the frontend, a Spring Boot REST API on the backend, and MySQL for persistent data storage. The backend follows a layered Controller, Service, and Repository architecture using Spring Data JPA, DTOs, validation, and centralised exception handling. Validation is applied on both the frontend and backend, and the full application can be run together using Docker Compose.
 
 ---
 
@@ -23,6 +23,7 @@ The application uses a React and TypeScript frontend, a Spring Boot REST API, an
 - Validate workout data on both the frontend and backend
 - Responsive layout for desktop and mobile
 - Persist workout data in MySQL
+- Cover core workout service behaviour with backend unit tests
 - Run the frontend, API, and database together with Docker Compose
 
 ---
@@ -89,18 +90,22 @@ The repositories also use **derived query methods**, allowing Spring Data JPA to
 - `findAllByOrderByUpdatedAtDesc()` to return workouts with the most recently created or edited first.
 - `findByWorkoutPlanIdOrderByPositionAsc()` to retrieve the exercises belonging to a workout in their saved order.
 
+Workout creation and update timestamps use Java `Instant` values. Hibernate is configured to use UTC for JDBC timestamp handling, so API timestamps are unambiguous and the frontend can display them correctly in the viewer's local timezone.
+
 ## Project Structure
 
 ```text
 gym-workout-planner/
 ├── api/                            # Spring Boot backend
 │   ├── src/
-│   │   └── main/
-│   │       ├── java/               # Controllers, services, repositories, entities and DTOs
-│   │       └── resources/
-│   │           ├── application.properties
-│   │           ├── schema.sql      # Database structure
-│   │           └── data.sql        # Exercise seed data
+│   │   ├── main/
+│   │   │   ├── java/               # Controllers, services, repositories, entities and DTOs
+│   │   │   └── resources/
+│   │   │       ├── application.properties
+│   │   │       ├── schema.sql      # Database structure
+│   │   │       └── data.sql        # Exercise seed data
+│   │   └── test/
+│   │       └── java/               # Backend tests
 │   ├── local.properties.example    # Template for local database credentials
 │   ├── Dockerfile
 │   └── pom.xml
@@ -192,10 +197,10 @@ From the `api` directory:
 ./mvnw spring-boot:run
 ```
 
-Wait for the application to finish starting. The API is available at:
+Wait for the application to finish starting. The API listens on `http://localhost:8080`, with application endpoints under `/api`. For example:
 
 ```text
-http://localhost:8080
+http://localhost:8080/api/exercises
 ```
 
 ### 4. Start the frontend
@@ -335,6 +340,8 @@ Links exercises to workouts and stores the values that belong to that workout, i
 
 A workout can contain multiple exercises. The `workout_plan_exercises` table stores the relationship between a workout and its selected exercises.
 
+Each table has its own primary key. `workout_plan_exercises.workout_plan_id` and `workout_plan_exercises.exercise_id` are foreign keys to `workout_plans` and `exercises`, and the combination is unique so the same exercise cannot be stored twice in one workout.
+
 ---
 
 ## Database Seed Data
@@ -354,7 +361,7 @@ The list contains 24 exercises across eight muscle groups:
 
 `schema.sql` contains the full database structure and `data.sql` contains the initial exercise data.
 
-The application uses `spring.sql.init.mode=always`, so the SQL initialisation scripts run whenever the API starts. The exercise seed inserts use presence checks so existing exercises are not inserted again on later startups.
+The application uses `spring.sql.init.mode=always`, so the SQL initialisation scripts run whenever the API starts. Exercise names are unique in the schema and `data.sql` uses `INSERT IGNORE`, making repeated startup seeding idempotent instead of creating duplicate exercise records.
 
 The workout tables are not populated with sample workouts because workouts are created by the user through the application.
 
@@ -366,28 +373,30 @@ The application code uses `workout-plans` in its API routes and backend model na
 
 ### Exercises
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/api/exercises` | Get all exercises |
-| `GET` | `/api/exercises?muscleGroup=BACK` | Get exercises matching the selected muscle group |
+| Method | Endpoint | Description | Success | Possible errors |
+| --- | --- | --- | --- | --- |
+| `GET` | `/api/exercises` | Get all exercises | `200` | — |
+| `GET` | `/api/exercises?muscleGroup=BACK` | Get exercises matching the selected muscle group | `200` | `400` invalid muscle group |
 
-The workout form loads the exercise list once and applies the muscle group filter on the client side. The filtered API endpoint is still available for direct API use.
+The `muscleGroup` query parameter accepts the application's supported muscle-group values: `CHEST`, `BACK`, `SHOULDERS`, `BICEPS`, `TRICEPS`, `LEGS`, `GLUTES`, and `CORE`. The workout form loads the full exercise list once and applies its filter on the client side; the filtered API endpoint remains available for direct API use.
 
 ### Workouts
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/api/workout-plans` | Get all workouts |
-| `GET` | `/api/workout-plans/{id}` | Get one workout |
-| `POST` | `/api/workout-plans` | Create a workout with selected exercises and target sets/reps |
-| `PUT` | `/api/workout-plans/{id}` | Update a workout and its exercises |
-| `DELETE` | `/api/workout-plans/{id}` | Delete a workout and its exercises |
+| Method | Endpoint | Description | Success | Possible errors |
+| --- | --- | --- | --- | --- |
+| `GET` | `/api/workout-plans` | Get all workouts, most recently created or edited first | `200` | — |
+| `GET` | `/api/workout-plans/{id}` | Get one workout by ID | `200` | `404` workout not found |
+| `POST` | `/api/workout-plans` | Create a workout with selected exercises and target sets/reps | `200` | `400` validation, `404` exercise not found, `409` duplicate exercise |
+| `PUT` | `/api/workout-plans/{id}` | Update a workout, including selected exercises and targets | `200` | `400` validation, `404` workout/exercise not found, `409` duplicate exercise |
+| `DELETE` | `/api/workout-plans/{id}` | Delete a workout and its saved exercise relationships | `200` | `404` workout not found |
 
 ### Workout Exercises
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/api/workout-plans/{workoutPlanId}/workout-plan-exercises` | Get the exercises saved in a workout in their saved order |
+| Method | Endpoint | Description | Success | Possible errors |
+| --- | --- | --- | --- | --- |
+| `GET` | `/api/workout-plans/{workoutPlanId}/workout-plan-exercises` | Get the exercises saved in a workout in their saved order | `200` | `404` workout not found |
+
+`{id}` and `{workoutPlanId}` are numeric identifiers for saved workouts.
 
 ---
 
@@ -414,6 +423,18 @@ The create and update endpoints send the workout details and selected exercises 
 }
 ```
 
+A workout response contains the saved workout metadata. Timestamps are returned as UTC instants with a `Z` suffix:
+
+```json
+{
+  "id": 4,
+  "name": "Upper Body Workout",
+  "description": "Chest, back and arms",
+  "createdAt": "2026-09-13T08:15:32.545786Z",
+  "updatedAt": "2026-09-13T08:15:32.545786Z"
+}
+```
+
 ---
 
 ## Validation and Error Handling
@@ -423,9 +444,9 @@ Workout data is validated on both the frontend and backend.
 Validation includes:
 
 - workout name is required
-- workout name must be 255 characters or fewer
+- workout name must be 255 characters or less
 - workout name must contain at least one letter or number
-- description must be 1000 characters or fewer
+- description must be 1000 characters or less
 - at least one exercise must be selected
 - exercise IDs must be valid positive values
 - target sets and target reps must be positive values
@@ -436,11 +457,30 @@ The backend uses centralised exception handling with `@RestControllerAdvice` to 
 
 ---
 
+## Backend Testing
+
+The backend includes JUnit 5 and Mockito tests for `WorkoutPlanService`. The service tests use mocked repositories, so they exercise business logic without requiring a real database. Coverage includes:
+
+- creating workouts and preserving exercise order
+- rejecting duplicate or missing exercises
+- adding, removing, reordering, and updating exercises during workout edits
+- preserving existing workout-exercise relationships when only targets change
+- handling missing workouts
+- deleting existing workouts and rejecting deletes for missing workouts
+
+An additional Spring Boot context test verifies that the application context loads successfully. Run the full backend test suite from the `api` directory with:
+
+```bash
+./mvnw test
+```
+
+---
+
 ## Using the Application
 
 ### Dashboard
 
-The dashboard is the starting point of the application. It displays the user's saved workouts as cards, with the most recently created or edited workouts shown first.
+The dashboard is the starting point of the application. It displays saved workouts as cards, with the most recently created or edited workouts shown first.
 
 Each card shows the workout name, optional description, number of exercises, and when the workout was created or last edited.
 
@@ -511,7 +551,7 @@ The user can cancel the action and remain on the workout, or confirm the deletio
 
 A summary of the available endpoints is provided in the [API endpoint plan](API_PLAN.md).
 
-Detailed API documentation is provided through the Postman collection in the [`postman`](postman/) folder.
+Detailed API documentation is provided through the exported Postman collection in the [`postman`](postman/) folder.
 
 The collection contains the current API requests for:
 
@@ -547,6 +587,14 @@ From the `api` directory:
 ./mvnw spring-boot:run
 ```
 
+### Run backend tests
+
+From the `api` directory:
+
+```bash
+./mvnw test
+```
+
 ### Build and start the full Docker stack
 
 From the project root:
@@ -568,18 +616,21 @@ This starts the MySQL database and Spring Boot API without starting the frontend
 - `docker compose up --build` starts the full application: database, API, and frontend.
 - `docker compose up -d db api` starts only the database and API, which is useful for Postman testing.
 
-If backend code has changed, add `--build` to rebuild the API image from the latest local source before starting it: 
-```bash 
+If backend code has changed, add `--build` to rebuild the API image from the latest local source before starting it:
+
+```bash
 docker compose up --build -d db api
 ```
 
-### Stop Docker while keeping database data
+### Stop and remove Docker containers while keeping database data
 
 From the project root:
 
 ```bash
 docker compose down
 ```
+
+This stops and removes the containers and Docker Compose network, while preserving the named MySQL volume and its stored data.
 
 ### Reset the Docker database completely
 
@@ -588,6 +639,8 @@ From the project root:
 ```bash
 docker compose down -v
 ```
+
+The `-v` option also removes the named MySQL volume, including any workouts stored in that Docker database. Use this only when a fresh database is needed.
 
 ### Connect to the Docker MySQL database
 
@@ -609,21 +662,43 @@ docker compose restart api
 
 This restarts only the API container without resetting the database or restarting the rest of the stack.
 
+### Stop the Docker API only
+
+From the project root:
+
+```bash
+docker compose stop api
+```
+
+This stops the API container while leaving the frontend and database running, which is useful for checking how the frontend handles API errors.
+
+Start the API again with:
+
+```bash
+docker compose start api
+```
+
 ## Troubleshooting
 
 ### Port already in use
 
-If Docker reports that port `8080` or `5173` is already in use, another local process is already using that port.
+If Docker reports that port `8080` or `5173` is already in use, another local process is already using that port. Stop any locally running Spring Boot API or Vite frontend before starting the Docker stack.
 
-Stop any locally running Spring Boot API or Vite frontend before starting the Docker stack:
+### Docker changes are not appearing
+
+If frontend or backend code has changed since the images were last built, rebuild before starting the stack:
 
 ```bash
 docker compose up --build
 ```
 
-This ensures the containers use the latest frontend and backend code.
+For API-only testing with the database:
 
-Resetting the Docker database
+```bash
+docker compose up --build -d db api
+```
+
+### Resetting the Docker database
 
 To completely reset the Docker database and recreate it from the current schema and seed data:
 
@@ -632,4 +707,4 @@ docker compose down -v
 docker compose up --build
 ```
 
-The -v option deletes the existing MySQL volume, including any workouts created in that Docker database. Use this only when a fresh database is needed.
+The `-v` option deletes the existing MySQL volume, including any workouts created in that Docker database. Use this only when a fresh database is needed.
