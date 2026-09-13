@@ -3,7 +3,7 @@ import App from './App';
 import {
   Dashboard,
   CreateEditWorkoutPlan,
-  PlanDetails,
+  WorkoutDetails,
   ExerciseDetails,
 } from './LazyPages';
 
@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/workout-plans/:id',
-        element: <PlanDetails />,
+        element: <WorkoutDetails />,
       },
       {
         path: '/workout-plans/:id/exercises/:workoutPlanExerciseId',

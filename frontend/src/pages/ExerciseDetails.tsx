@@ -10,12 +10,18 @@ import {
   Badge
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import { api } from "../services/api";
+import { api, ApiError } from "../services/api";
 import { exerciseImages } from "../data/exerciseImages";
 import type { WorkoutPlanExerciseResponse } from "../types/WorkoutPlanExerciseResponse";
 import type { RequestState } from '../types/RequestState';
 import "../styles/ExerciseDetails.css";
 
+class ExerciseNotFoundError extends Error {
+  constructor() {
+    super("Exercise not found");
+    this.name = "ExerciseNotFoundError";
+  }
+}
 
 function ExerciseDetails() {
   const { id, workoutPlanExerciseId } = useParams();
@@ -38,7 +44,7 @@ function ExerciseDetails() {
         );
 
         if (!selectedExercise) {
-          throw new Error("Exercise not found");
+          throw new ExerciseNotFoundError();
         }
 
         setState({
@@ -65,11 +71,58 @@ function ExerciseDetails() {
   }
 
   if (state.status === "error") {
+    const exerciseNotFound =
+      state.error instanceof ExerciseNotFoundError;
+
+    const workoutNotFound =
+      state.error instanceof ApiError &&
+      state.error.status === 404;
+
     return (
       <Container size="lg" py="xl">
-        <Text c="red">
-          Unable to load exercise. Please try again.
-        </Text>
+        <Stack gap="md">
+          {exerciseNotFound ? (
+            <>
+              <Title order={2}>Exercise not found</Title>
+
+              <Text c="dimmed">
+                This exercise may have been removed from the workout or the link may be incorrect.
+              </Text>
+
+              <Anchor
+                component={Link}
+                to={`/workout-plans/${id}`}
+                className="backLink"
+                underline="never"
+              >
+                <IconArrowLeft size={18} />
+                Back to workout
+              </Anchor>
+            </>
+          ) : workoutNotFound ? (
+            <>
+              <Title order={2}>Workout not found</Title>
+
+              <Text c="dimmed">
+                This workout may have been deleted or the link may be incorrect.
+              </Text>
+
+              <Anchor
+                component={Link}
+                to="/"
+                className="backLink"
+                underline="never"
+              >
+                <IconArrowLeft size={18} />
+                Back to workouts
+              </Anchor>
+            </>
+          ) : (
+            <Text c="red">
+              Unable to load exercise. Please try again.
+            </Text>
+          )}
+        </Stack>
       </Container>
     );
   }

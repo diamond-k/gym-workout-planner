@@ -27,11 +27,21 @@ export interface Api {
   getWorkoutPlanExercises(workoutPlanId: number): Promise<WorkoutPlanExerciseResponse[]>;
 }
 
+export class ApiError extends Error {
+  status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 async function ensureOk(response: Response, doing: string): Promise<void> {
   if (response.ok) {
     return;
   }
 
+  let message = `Failed to ${doing}: ${response.status} ${response.statusText}`;
   const contentType = response.headers.get('content-type');
 
   if (contentType?.includes('application/json')) {
@@ -39,23 +49,21 @@ async function ensureOk(response: Response, doing: string): Promise<void> {
 
     if (body && typeof body === 'object') {
       const messages = Object.values(body)
-        .filter((value) => typeof value === 'string');
+        .filter((value): value is string => typeof value === 'string');
 
       if (messages.length > 0) {
-        throw new Error(messages.join(' '));
+        message = messages.join(' ');
       }
+    }
+  } else {
+    const body = await response.text();
+
+    if (body) {
+      message = body;
     }
   }
 
-  const message = await response.text();
-
-  if (message) {
-    throw new Error(message);
-  }
-
-  throw new Error(
-    `Failed to ${doing}: ${response.status} ${response.statusText}`,
-  );
+  throw new ApiError(response.status, message);
 }
 
 export const api: Api = {

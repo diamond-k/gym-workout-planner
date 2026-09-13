@@ -16,7 +16,7 @@ import {
   Modal
 } from "@mantine/core";
 import { IconArrowLeft } from "@tabler/icons-react";
-import { api } from "../services/api";
+import { api, ApiError } from "../services/api";
 import type { Exercise } from "../types/Exercise";
 import type { MuscleGroup } from "../types/MuscleGroup";
 import type { RequestState } from "../types/RequestState";
@@ -25,6 +25,7 @@ import type { WorkoutPlanExerciseResponse } from "../types/WorkoutPlanExerciseRe
 import ExerciseCard from '../components/ExerciseCard';
 import "../styles/CreateEditWorkoutPlan.css";
 import "../styles/ExerciseCard.css";
+
 
 type SelectedExercise = {
   exercise: Exercise;
@@ -98,7 +99,7 @@ function CreateEditWorkoutPlan() {
   const [error, setError] = useState("");
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
-  // load the exercise catalogue for both create and edit
+  // load the exercise list for both create and edit
   useEffect(() => {
     api
       .getExercises()
@@ -340,11 +341,63 @@ function CreateEditWorkoutPlan() {
         navigate(`/workout-plans/${createdPlan.id}`);
       }
     } catch (error) {
-      // if the POST fails, show user a readable error message.
-      setError(`Unable to save workout: ${(error as Error).message}`);
+      if (error instanceof ApiError) {
+          if (error.status === 400 || error.status === 409) {
+            setError(error.message);
+          } else if (error.status === 404 && isEditMode) {
+            setError("This workout no longer exists.");
+          } else {
+            setError("Unable to save workout. Please try again.");
+          }
+        } else {
+          setError("Unable to save workout. Please try again.");
+      }
     } finally {
       setSaving(false);
     }
+  }
+
+  if (isEditMode && editState.status === "loading") {
+    return (
+      <Container size="lg" py="xl">
+        <Text c="dimmed">Loading workout...</Text>
+      </Container>
+    );
+  }
+
+  if (isEditMode && editState.status === "error") {
+    const workoutNotFound = editState.error instanceof ApiError && editState.error.status === 404;
+
+    return (
+      <Container size="lg" py="xl">
+        <Stack gap="md">
+          {workoutNotFound ? (
+            <>
+              <Title order={2}>Workout not found</Title>
+
+              <Text c="dimmed">
+                This workout may have been deleted or the link may be incorrect.
+              </Text>
+
+              <Anchor
+                component="button"
+                type="button"
+                onClick={() => navigate("/")}
+                className="backLink"
+                underline="never"
+              >
+                <IconArrowLeft size={18} />
+                Back to workouts
+              </Anchor>
+            </>
+          ) : (
+            <Text c="red">
+              Unable to load workout. Please try again.
+            </Text>
+          )}
+        </Stack>
+      </Container>
+    );
   }
 
   return (
@@ -391,14 +444,6 @@ function CreateEditWorkoutPlan() {
           <Title order={2}>
             {isEditMode ? "Edit Workout" : "Create Workout"}
           </Title>
-
-          {isEditMode && editState.status === "loading" && (
-            <Text c="dimmed">Loading workout...</Text>
-          )}
-
-          {isEditMode && editState.status === "error" && (
-            <Text c="red">Unable to load workout. Please try again.</Text>
-          )}
 
           <TextInput
             label="Name"
